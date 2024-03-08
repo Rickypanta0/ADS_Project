@@ -58,3 +58,46 @@ def insertionsort(lst, *, start=0, end=None):
         while i >= start and k <= lst[i]:
             lst[i], lst[i + 1] = lst[i + 1], lst[i]
             i = i - 1
+            
+def insertion_sort_5(A, start):
+    """Sort A from start to max(len(A),start+5)
+
+    Args:
+        A : the list to sort
+        start : start sorting from this position
+
+    Returns:
+        _type_: the location of the median belong to the sublist (start+2)
+    """
+    end = min(start + 5, len(A))
+    for i in range(start + 1, end):
+        key = A[i]
+        j = i - 1
+        while j >= start and key < A[j]:
+            A[j + 1] = A[j]
+            j -= 1
+        A[j + 1] = key
+    return start + 2 if end==start+5 else start+1   # posizione della mediana in un blocco di 5 elementi
+
+def partitionT(A, start=0, end=None, ppos=None):
+    """Partiziona l'array A da start a end compreso intorno all'elemento in ppos.
+    Modifica l'array in place e restituisce il nuovo indice del pivot."""
+
+    if end is None or end > len(A) - 1:
+        end = len(A) - 1  # Assicura che end sia l'ultimo indice valido
+
+    # Sposta il pivot all'ultimo elemento (se ppos non è già end)
+    if ppos is not None and ppos != end:
+        A[ppos], A[end] = A[end], A[ppos]
+    pivot = A[end]
+
+    i = start - 1
+    for j in range(start, end):  # Cicla fino a end - 1 poiché end è ora l'ultimo elemento
+        if A[j] <= pivot:
+            i += 1
+            A[i], A[j] = A[j], A[i]
+    
+    # Sposta il pivot nella sua posizione corretta
+    A[i + 1], A[end] = A[end], A[i + 1]
+    return i + 1  # Restituisce il nuovo indice del pivot
+
