@@ -8,7 +8,7 @@ class Heap:
         return 2*i+2
     
     @staticmethod
-    def left(self, i):
+    def left(i):
         return 2*i+1
     
     def parent(self, i):

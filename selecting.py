@@ -1,5 +1,5 @@
 from sorting import *
-
+from Min_Max_heap import *
 
 def median_of_medians(lst, *, start=0, end=None):
     """Calculate approximate median of lst."""
@@ -82,4 +82,30 @@ def median_of_medians_Place(A, i, start=0, end=None):
 
 # Esempio di utilizzo:
 A = [1,2,3,4,5,1000,8,9,99]
-print(median_of_medians_Place(A, len(A)//2))
+#print(median_of_medians_Place(A, len(A)//2))
+
+def Heap_select(A,k):
+    if k<=(len(A)//2):
+        H1 = MinHeap(A)
+        H1.Build_Heap()
+        H2 = MinHeap()
+    else:
+        H1 = MaxHeap(A)
+        H1.Build_Heap()
+        k=len(A)-k+1
+        H2 = MaxHeap()
+    H2.Heap_Insert(H1.A[0])
+    for i in range(0, k-1):
+        root = H2.Heap_Extract()
+        left=H1.left(i)
+        right=H1.right(i)
+        if left<=H1.heapsize:
+            H2.Heap_Insert(H1.A[left])
+        if right<=H1.heapsize:
+            H2.Heap_Insert(H1.A[right])
+    return H2.Heap_Extract()
+
+
+print(Heap_select(A,4))
+print(sorted(A))
+    
