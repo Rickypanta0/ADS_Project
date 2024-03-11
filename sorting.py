@@ -101,7 +101,7 @@ def partitionT(A, start=0, end=None, ppos=None):
     A[i + 1], A[end] = A[end], A[i + 1]
     return i + 1  # Restituisce il nuovo indice del pivot
 
-def median_of_medians(A, i):
+def median_of_mediansT(A, i):
     """Median of medians used for tests
 
     Args:
@@ -118,7 +118,7 @@ def median_of_medians(A, i):
         pivot = sorted(medians)[len(medians)//2]
     else:
         #the pivot is the median of the medians
-        pivot = median_of_medians(medians, len(medians)//2)
+        pivot = median_of_mediansT(medians, len(medians)//2)
 
     #partitioning step
     low = [j for j in A if j < pivot]
@@ -126,8 +126,8 @@ def median_of_medians(A, i):
 
     k = len(low)
     if i < k:
-        return median_of_medians(low,i)
+        return median_of_mediansT(low,i)
     elif i > k:
-        return median_of_medians(high,i-k-1)
+        return median_of_mediansT(high,i-k-1)
     else: #pivot = k
         return pivot

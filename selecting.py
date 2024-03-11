@@ -121,5 +121,5 @@ def QuickSelectVariant(A,k,start=0,end=None):
 C = [1,2,3,4,5,1000,8,9,99]
 A=[3, 6, 10, 7, 5, 1, 4]
 B=[3, 6, 10, 7, 5, 1, 4]
-#print(median_of_medians(B,1))
-#print(median_of_medians_Place(B,1))
+#print(median_of_mediansT(B,6))
+#print(median_of_medians_Place(B,6))
