@@ -77,7 +77,7 @@ def insertion_sort_5(A, start,end):
             A[j + 1] = A[j]
             j -= 1
         A[j + 1] = key
-    return start + 2 if end>=start+4 else start+1   # posizione della mediana in un blocco di 5 elementi
+    return start + 2 if end>=start+4 else min(len(A)-1, start+1 )  # posizione della mediana in un blocco di 5 elementi
 
 def partitionT(A, start=0, end=None, ppos=None):
     """Partiziona l'array A da start a end compreso intorno all'elemento in ppos.
@@ -101,7 +101,9 @@ def partitionT(A, start=0, end=None, ppos=None):
     A[i + 1], A[end] = A[end], A[i + 1]
     return i + 1  # Restituisce il nuovo indice del pivot
 
-def median_of_mediansT(A, i):
+def median_of_mediansT(A, i,start=0, end=None):
+    if end is None:
+        end=len(A)
     """Median of medians used for tests
 
     Args:
@@ -122,12 +124,13 @@ def median_of_mediansT(A, i):
 
     #partitioning step
     low = [j for j in A if j < pivot]
+    equals = [j for j in A if j == pivot]  # Elementi uguali al pivot
     high = [j for j in A if j > pivot]
 
     k = len(low)
     if i < k:
-        return median_of_mediansT(low,i)
-    elif i > k:
-        return median_of_mediansT(high,i-k-1)
-    else: #pivot = k
-        return pivot
+        return median_of_mediansT(low, i)
+    elif i < k + len(equals):  # i è all'interno degli elementi uguali al pivot
+        return pivot  # Tutti gli elementi in equals sono uguali a pivot
+    else:  # i è nella parte alta
+        return median_of_mediansT(high, i - k - len(equals))

@@ -1,5 +1,6 @@
 from sorting import *
 from Min_Max_heap import *
+import math
 
 def median_of_medians(lst, *, start=0, end=None):
     """Calculate approximate median of lst."""
@@ -54,20 +55,21 @@ def median_of_medians_Place(A, i, start=0, end=None):
     if end - start <= 5:
         end=min(len(A), end+1)
         A[start:end] = sorted(A[start:end])  # Ordina se meno di 5 elementi
-        return A[i]  # Restituisce l'i-esimo elemento
+        return A[i+start]  # Restituisce l'i-esimo elemento
     
     # Step 1: Organizza le mediane dei blocchi di 5 all'inizio dell'array
     medians_index = start
     for sub_start in range(start, end, 5):
-        median_pos = insertion_sort_5(A, sub_start, min(end, sub_start+5))
+        median_pos = insertion_sort_5(A, sub_start, min(end, sub_start+4))
         A[medians_index], A[median_pos] = A[median_pos], A[medians_index]
         medians_index += 1
     
     # Step 2: Trova la mediana delle mediane utilizzando la stessa funzione ricorsiva
-    mid = (medians_index - start) // 2
+    mid = math.ceil((medians_index-start)//2)
     pivot = median_of_medians_Place(A, mid, start, medians_index-1)
     # Step 3: Usa il pivot per partizionare l'array
-    pivot_index = partitionT(A, ppos=A.index(pivot, start, end), start=start, end=end)
+    pivot_position = start + A[start:end].index(pivot)
+    pivot_index = partitionT(A, start=start, end=end, ppos=pivot_position)
 
     # Step 4: Ricorsione sul partizionamento corretto
     if i < pivot_index - start:
@@ -118,8 +120,12 @@ def QuickSelectVariant(A,k,start=0,end=None):
         return select(A,k-1,start=start,end=end)
 
 #Esempio funzionamento
-C = [1,2,3,4,5,1000,8,9,99]
-A=[3, 6, 10, 7, 5, 1, 4]
-B=[3, 6, 10, 7, 5, 1, 4]
-#print(median_of_mediansT(B,6))
-#print(median_of_medians_Place(B,6))
+C = [1,1,1,1,1,1,1,1]
+A=[3, 6, 10, 7, 6, 1, 4]
+B=[58, 84, 23, 63, 95, 8, 36, 47, 41, 75, 51, 50, 65, 34, 56, 33, 55, 26, 1, 68,24,22,32,10]
+#print(median_of_mediansT(B,len(B)//2))
+#print(median_of_medians_Place(B,len(B)//2))
+#print(sorted(B))
+#print(median_of_mediansT(A,len(A)//2))
+#print(median_of_medians_Place(A,len(A)//2))
+#print(median_of_medians_Place(C,len(C)//2))
