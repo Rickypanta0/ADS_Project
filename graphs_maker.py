@@ -4,6 +4,7 @@ from selecting import median_of_medians_Place, Heap_select, QuickSelectVariant
 import time
 import random
 import math
+import gc
 from sorting import median_of_mediansT
 
 def resolution():
@@ -23,10 +24,14 @@ def benchmark(algorithm, n, maxv, resolution, runs=3):
     times = []
     for _ in range(runs):
         A = generate_input(n, maxv)
+        if gc.isenabled():
+            gc.disable()                # disabilita il garbage collector
         start_time = time.monotonic()
         #print(f"Testing array (size {n}): {A}")
         algorithm(A, len(A)//2)
         end_time = time.monotonic()
+        if not gc.isenabled():
+            gc.enable()                 # riabilita il garbage collector
         times.append(end_time - start_time)
     return sum(times) / len(times)
 """
