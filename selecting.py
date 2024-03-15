@@ -2,25 +2,50 @@ from sorting import *
 from Min_Max_heap import *
 import math
 
-def median_of_medians(lst, *, start=0, end=None):
-    """Calculate approximate median of lst."""
+def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
+    assert lst is not None
+    assert 0 <= start < len(lst)
+    assert (end is None) or (start < end <= len(lst))
+    assert blocksize > 0
 
-    BLOCKSIZE = 5
+    """Calculate approximate median of subarray lst[start:end].
+
+        Positional arguments:
+            lst      : the list to calculate the median of.
+        Keyword arguments:
+            start    : the starting point of the subarray; defaults to 0;
+            end      : the ending point (NOT included) of the subarray; defaults
+                        to the length of lst;
+            blocksize: the size of the blocks of elements sorted; defaults to 5.
+    """
+
+    # Per ogni blocco b di dimensione blocksize, trova la mediana ordinandolo e
+    # aggiungi la mediana a una nuova lista (medians). Effettua la ricorsione su
+    # quella lista finché non rimane solo un elemento, cioè la mediana delle
+    # mediane.
 
     if end is None:
         end = len(lst)
 
-    if end - start == 1:
+    subarray_length = end - start
+    if subarray_length == 1:
         return lst[start]
 
     medians = []
-    for i in range(start, end, BLOCKSIZE):
-        rend = min(end, i + BLOCKSIZE)
-        insertionsort(lst, start=i, end=rend)
-        medians.append(lst[(i + rend) // 2])
-        # print(f"Risultato insertionsort {i} - {rend}", lst)
 
-    return median_of_medians(medians)
+    # Il numero di mediane da calcolare è dato dal rapporto tra il numero di
+    # elementi del sottovettore considerato e la dimensione dei blocchi. Siccome
+    # l'ultimo blocco può avere dimensione strettamente minore di blocksize, si
+    # arrotonda per eccesso.
+    n_medians = math.ceil(subarray_length / blocksize)
+    for i in range(n_medians):
+        block_start = start + i * blocksize
+        block_end = min(block_start + blocksize, end)
+        insertionsort(lst, start=block_start, end=block_end)
+        median_position = (block_start + block_end) // 2
+        medians.append(lst[median_position])
+
+    return median_of_medians_non_in_place(medians)
 
 
 def select(lst, k, *, start=0, end=None):
