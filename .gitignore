@@ -4,3 +4,6 @@
 
 # file pdf della relazione
 *.pdf
+
+# file ausiliari generati da python
+*.pyc
