@@ -1,38 +1,59 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\documentclass[a4paper]{article}
+\usepackage[italian]{babel}
+
+% immagini
+\usepackage{graphicx}
+\usepackage{svg}
+
+% matematica
+\usepackage{amsmath}
 \usepackage{amsfonts}
+
+% codice
+\usepackage{listings}
+\lstset{
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\small\ttfamily
+}
+
 \usepackage{blindtext}
 \usepackage{titlesec}
 \usepackage{geometry}
 \usepackage{relsize}
 \usepackage{tikz}
-\geometry{
- a4paper,
- total={190mm,257mm},
- left=25mm,
- right=25mm,
- top=50mm,
- }
-\title{ADS_relazione}
-\date{December 2023}
-\sloppy
+% \geometry{
+% a4paper,
+% total={190mm,257mm},
+% left=25mm,
+% right=25mm,
+% top=50mm,
+% }
+
+
+\sloppy % ?
+
 \begin{document}
-\begin{center}
-\textscale{3.2}{\textbf{ Analisi di Algoritmi}}\\
-\vspace{13mm}
-\textscale{1.8}{Progetto di laboratorio di Algoritmi e Strutture Dati}\\
-\vspace{15mm}
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.5\linewidth]{photo/uniud_logo.png}
-\end{figure}
-\vspace{15mm}
-\textscale{1.5}{Università degli studi di Udine}\\
-\textscale{1.5}{Dipartimento di scienze Informatiche, Matematiche e Fisiche}\\
-\vspace{12mm}
-\textscale{1.5}{Anno Accademico 2023/2024}\\
-\textscale{1.5}{Matricole: 162367, 162473}\\
-\vspace{30mm}
-\textscale{1.4}{Ludovico Gerardi, Sclauzero Lorenzo, Pantanali Riccardo}\\
-\end{center}
+
+\begin{titlepage} % pagina riservata al titolo
+    \begin{center}
+        \vspace*{1cm}
+        {\Huge\bfseries Analisi di algoritmi di selezione\par}
+        \vspace{.5cm}
+        {\LARGE Progetto di laboratorio di Algoritmi e Strutture Dati\par}
+        \vspace{1cm}
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=.5\textwidth]{photo/uniud_logo.pdf}
+        \end{figure}
+        \vspace{1.5cm}
+        {\LARGE Università degli studi di Udine\par}
+        {\LARGE Dipartimento di scienze Informatiche, Matematiche e Fisiche\par}
+        \vfill
+        {\Large Anno Accademico 2023/2024\par}
+        {\Large Matricole: 162367, 162473\par}
+        {\Large\itshape Gerardi Ludovico, Sclauzero Lorenzo, Pantanali Riccardo\par}
+    \end{center}
+\end{titlepage}
+
 \end{document}

@@ -3,7 +3,7 @@
 *.aux
 
 # file pdf della relazione
-*.pdf
+ADS_relazione.pdf
 
 # file ausiliari generati da python
 *.pyc
