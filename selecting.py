@@ -45,7 +45,7 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
         median_position = (block_start + block_end) // 2
         medians.append(lst[median_position])
 
-    return median_of_medians_non_in_place(medians)
+    return median_of_medians_non_in_place(medians, blocksize=blocksize)
 
 
 
