@@ -48,6 +48,57 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
     return median_of_medians_non_in_place(medians)
 
 
+
+def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
+    assert lst is not None
+    assert 0 <= start < len(lst)
+    assert (end is None) or (start < end <= len(lst))
+    assert blocksize > 0
+
+    """Calculate approximate median of subarray lst[start:end].
+
+        Positional arguments:
+            lst      : the list to calculate the median of.
+        Keyword arguments:
+            start    : the starting point of the subarray; defaults to 0;
+            end      : the ending point (NOT included) of the subarray; defaults
+                        to the length of lst;
+            blocksize: the size of the blocks of elements sorted; defaults to 5.
+    """
+
+    # Per ogni blocco b di dimensione blocksize, trova la mediana ordinandolo e
+    # sposta la mediana all'inizio del sottovettore. Effettua la ricorsione su
+    # sulla parte iniziale del sottovettore, finché il sottovettore considerato
+    # ha dimensione 1, cioè quando contiene solo la mediana delle mediane.
+
+    if end is None:
+        end = len(lst)
+
+    subarray_length = end - start
+    if subarray_length == 1:
+        return lst[start]
+
+    # Il numero di mediane da calcolare è dato dal rapporto tra il numero di
+    # elementi del sottovettore considerato e la dimensione dei blocchi. Siccome
+    # l'ultimo blocco può avere dimensione strettamente minore di blocksize, si
+    # arrotonda per eccesso.
+    n_medians = math.ceil(subarray_length / blocksize)
+    for i in range(n_medians):
+        block_start = start + i * blocksize
+        block_end = min(block_start + blocksize, end)
+        insertionsort(lst, start=block_start, end=block_end)
+        median_position = (block_start + block_end) // 2
+        lst[start+i], lst[median_position] = lst[median_position], lst[start+i]
+
+    # Dato che le mediane vengono sempre spostate nella parte iniziale del
+    # sottovettore start rimane inalterato; invece end diventa start+n_medians
+    # perché sono state spostate esattamente n_medians mediane e quindi la parte
+    # iniziale contenente le mediane è lunga n_medians.
+    return median_of_medians_quasi_in_place(lst, start=start,
+                                            end=start+n_medians,
+                                            blocksize=blocksize)
+
+
 def select(lst, k, *, start=0, end=None):
     """Select the kth smallest element in lst."""
     assert k < len(lst)
