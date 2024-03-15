@@ -1,0 +1,6 @@
+# file ausiliari prodotti da LaTeX
+*.log
+*.aux
+
+# file pdf della relazione
+*.pdf
