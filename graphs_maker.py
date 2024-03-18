@@ -21,14 +21,25 @@ def generate_input(n, max_value):
     return [random.randint(0, max_value) for _ in range(n)]
 
 def benchmark(algorithm, n, maxv, resolution, runs=3):
+    """
+    Utilizzi:
+    - usare k random: 
+        k = random.randint(1, len(A))
+        algorithm(A, k-1)
+    - usare un k fisso (es. mediano):
+        algorithm(A, len(A)//2)
+    Commentare le linee rispettivamente a quello che si sceglie
+    """
     times = []
     for _ in range(runs):
         A = generate_input(n, maxv)
+        #k = random.randint(1, len(A))  # Sceglie un k casuale per ogni esecuzione
         if gc.isenabled():
             gc.disable()                # disabilita il garbage collector
         start_time = time.monotonic()
-        #print(f"Testing array (size {n}): {A}")
-        algorithm(A, len(A)//2)
+        #algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
+        algorithm(A, len(A)-1)
+        #algorithm(A, len(A)//2)
         end_time = time.monotonic()
         if not gc.isenabled():
             gc.enable()                 # riabilita il garbage collector
