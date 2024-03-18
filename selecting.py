@@ -29,7 +29,7 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
 
     subarray_length = end - start
     if subarray_length == 1:
-        return lst[start]
+        return start
 
     medians = []
 
@@ -76,7 +76,7 @@ def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
 
     subarray_length = end - start
     if subarray_length == 1:
-        return lst[start]
+        return start
 
     # Il numero di mediane da calcolare è dato dal rapporto tra il numero di
     # elementi del sottovettore considerato e la dimensione dei blocchi. Siccome
@@ -143,22 +143,16 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
 
 def select(lst, k, *, start=0, end=None):
     """Select the kth smallest element in lst."""
-    assert k < len(lst)
+    assert lst is not None
+    assert 0 <= k < len(lst)
+    assert 0 <= start < len(lst)
+    assert end is None or start < end <= len(lst)
 
     if end is None:
         end = len(lst)
 
-    # print(f"Chiamata a select in {start} - {end}")
-
-    m = median_of_medians_Place(lst,k, start=start, end=end)
-    mi = lst.index(m, start, end)
-
-    # print(f"La mediana è {m} in posizione {mi}")
-
-    p = partition(lst, start=start, end=end, ppos=mi)
-
-    # print("Risultato partition:", lst)
-    # print("Il pivot è finito in posizione", p)
+    median_of_medians_quasi_in_place(lst, start=start, end=end)
+    p = partition(lst, start=start, end=end, ppos=start)
 
     if p == k:
         return lst[k]
