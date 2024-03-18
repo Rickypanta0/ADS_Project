@@ -64,32 +64,33 @@ for n in n_values:
     time_quick_select_variant = benchmark(QuickSelectVariant, n, maxv, timer_resolution)
     points.append((n, time_median_of_medians, time_heap_select, time_quick_select_variant))
 """
-nmin=1000
-nmax=100000
-iters=100
-timer_resolution = resolution()
-A=nmin
-B=2**((math.log(nmax, 2)-math.log(nmin, 2))/(iters-1))
-points = [[None, None,None, None,None]]*iters
-for i in range(iters):
-    print(f"\r{i}", end='')
-    n = int(A*(B**i))
-    points[i]=(n,benchmark(median_of_medians_Place, n, nmax, timer_resolution),
-               benchmark(Heap_select, n, nmax, timer_resolution),
-               benchmark(QuickSelectVariant, n, nmax, timer_resolution),)
-# Estrai i valori per il plotting
-ns, times_median_of_medians, times_heap_select, times_quick_select_variant = zip(*points)
-
-# Grafico
-plt.figure(figsize=(10, 8))
-plt.plot(ns, times_median_of_medians, '-o', label='Median of Medians')
-plt.plot(ns, times_heap_select, '-o', label='Heap Select')
-plt.plot(ns, times_quick_select_variant, '-o', label='Quick Select Variant')
-plt.xscale('log')
-plt.yscale('log')
-plt.xlabel('Array Size (n)')
-plt.ylabel('Time (seconds)')
-plt.title('Benchmarking Selection Algorithms')
-plt.legend()
-plt.grid(True)
-plt.show()
+if __name__ == '__main__':
+    nmin=1000
+    nmax=100000
+    iters=100
+    timer_resolution = resolution()
+    A=nmin
+    B=2**((math.log(nmax, 2)-math.log(nmin, 2))/(iters-1))
+    points = [[None, None,None, None,None]]*iters
+    for i in range(iters):
+        print(f"\r{i}", end='')
+        n = int(A*(B**i))
+        points[i]=(n,benchmark(median_of_medians_Place, n, nmax, timer_resolution),
+                   benchmark(Heap_select, n, nmax, timer_resolution),
+                   benchmark(QuickSelectVariant, n, nmax, timer_resolution),)
+    # Estrai i valori per il plotting
+    ns, times_median_of_medians, times_heap_select, times_quick_select_variant = zip(*points)
+    
+    # Grafico
+    plt.figure(figsize=(10, 8))
+    plt.plot(ns, times_median_of_medians, '-o', label='Median of Medians')
+    plt.plot(ns, times_heap_select, '-o', label='Heap Select')
+    plt.plot(ns, times_quick_select_variant, '-o', label='Quick Select Variant')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel('Array Size (n)')
+    plt.ylabel('Time (seconds)')
+    plt.title('Benchmarking Selection Algorithms')
+    plt.legend()
+    plt.grid(True)
+    plt.show()

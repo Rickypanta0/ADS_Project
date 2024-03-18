@@ -8,7 +8,7 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
     assert (end is None) or (start < end <= len(lst))
     assert blocksize > 0
 
-    """Calculate approximate median of subarray lst[start:end].
+    """Calculate an approximate median of subarray lst[start:end).
 
         Positional arguments:
             lst      : the list to calculate the median of.
@@ -17,6 +17,10 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
             end      : the ending point (NOT included) of the subarray; defaults
                         to the length of lst;
             blocksize: the size of the blocks of elements sorted; defaults to 5.
+
+
+        Return:
+            the median of medians.
     """
 
     # Per ogni blocco b di dimensione blocksize, trova la mediana ordinandolo e
@@ -29,7 +33,7 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
 
     subarray_length = end - start
     if subarray_length == 1:
-        return start
+        return lst[start]
 
     medians = []
 
@@ -55,7 +59,7 @@ def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
     assert (end is None) or (start < end <= len(lst))
     assert blocksize > 0
 
-    """Calculate approximate median of subarray lst[start:end].
+    """Calculate an approximate median of subarray lst[start:end).
 
         Positional arguments:
             lst      : the list to calculate the median of.
@@ -64,6 +68,9 @@ def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
             end      : the ending point (NOT included) of the subarray; defaults
                         to the length of lst;
             blocksize: the size of the blocks of elements sorted; defaults to 5.
+
+        Return:
+            the position of the median of medians.
     """
 
     # Per ogni blocco b di dimensione blocksize, trova la mediana ordinandolo e
@@ -106,7 +113,7 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
     assert (end is None) or (start < end <= len(lst))
     assert blocksize > 0
 
-    """Calculate approximate median of subarray lst[start:end].
+    """Calculate an approximate median of subarray lst[start:end).
 
         Positional arguments:
             lst      : the list to calculate the median of.
@@ -115,6 +122,9 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
             end      : the ending point (NOT included) of the subarray; defaults
                         to the length of lst;
             blocksize: the size of the blocks of elements sorted; defaults to 5.
+
+        Return:
+            the position of the median of medians.
     """
 
     # Versione iterativa di median_of_medians_quasi_in_place,
@@ -142,11 +152,21 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
 
 
 def select(lst, k, *, start=0, end=None):
-    """Select the kth smallest element in lst."""
     assert lst is not None
     assert 0 <= k < len(lst)
     assert 0 <= start < len(lst)
     assert end is None or start < end <= len(lst)
+
+    """Select the kth smallest element in subarray lst[start:end)
+
+        Positional arguments:
+            lst     : the list to search;
+            k       : the position of the element to select.
+        Keyword arguments:
+            start   : the starting point of the subarray; defaults to 0;
+            end     : the ending point (NOT included) of the subarray; defaults
+                        to len(lst)
+    """
 
     if end is None:
         end = len(lst)
