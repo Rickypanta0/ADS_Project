@@ -58,7 +58,7 @@ nmax=100000
 iters=100
 timer_resolution = resolution()
 A=nmin
-B=2**((math.log(nmax)-math.log(nmin))/(iters-1))
+B=2**((math.log(nmax, 2)-math.log(nmin, 2))/(iters-1))
 points = [[None, None,None, None,None]]*iters
 for i in range(iters):
     print(f"\r{i}", end='')
