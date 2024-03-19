@@ -1,11 +1,11 @@
 import time
 import matplotlib.pyplot as plt
-from selecting import median_of_medians_Place, Heap_select, QuickSelectVariant
+from selecting import *
 import time
 import random
 import math
 import gc
-from sorting import median_of_mediansT
+from sorting import *
 
 def resolution():
     """Determina la risoluzione del timer."""
@@ -38,8 +38,8 @@ def benchmark(algorithm, n, maxv, resolution, runs=3):
             gc.disable()                # disabilita il garbage collector
         start_time = time.monotonic()
         #algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
-        algorithm(A, len(A)-1)
-        #algorithm(A, len(A)//2)
+        #algorithm(A, len(A)-1)
+        algorithm(A, len(A)//2)
         end_time = time.monotonic()
         if not gc.isenabled():
             gc.enable()                 # riabilita il garbage collector
