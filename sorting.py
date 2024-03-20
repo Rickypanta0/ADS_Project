@@ -56,9 +56,10 @@ def insertionsort(lst, *, start=0, end=None):
         k = lst[j]
         i = j - 1
         while i >= start and k <= lst[i]:
-            lst[i], lst[i + 1] = lst[i + 1], lst[i]
+            lst[i+1] = lst[i]
             i = i - 1
-            
+        lst[i+1] = k
+
 def insertion_sort_5(A, start,end):
     """Sort A from start to max(len(A),start+5)
 
