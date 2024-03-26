@@ -213,9 +213,6 @@ def median_of_medians_Place(A, i, start=0, end=None):
     else:  # i == pivot_index - start
         return A[pivot_index]
 
-# Esempio di utilizzo:
-#print(median_of_medians_Place(A, len(A)//2))
-#print(median_of_medians_Place(B, 4,start=0,end=6))
 
 def Heap_select(A,k):
     if k<=(len(A)//2):
@@ -238,9 +235,6 @@ def Heap_select(A,k):
             H2.Heap_Insert(H1.A[right])
     return H2.Heap_Extract()
 
-#Esempio funzionamento
-#print(Heap_select(A,4))
-#print(sorted(A))
 
 def QuickSelectVariant(A,k,start=0,end=None):
     if end is None:
@@ -250,14 +244,3 @@ def QuickSelectVariant(A,k,start=0,end=None):
     else:
         #return selectT(A,k-1,p,q)  
         return select(A,k-1,start=start,end=end)
-
-#Esempio funzionamento
-C = [1,1,1,1,1,1,1,1]
-A=[3, 6, 10, 7, 6, 1, 4]
-B=[58, 84, 23, 63, 95, 8, 36, 47, 41, 75, 51, 50, 65, 34, 56, 33, 55, 26, 1, 68,24,22,32,10]
-#print(median_of_mediansT(B,len(B)//2))
-#print(median_of_medians_Place(B,len(B)//2))
-#print(sorted(B))
-#print(median_of_mediansT(A,len(A)//2))
-#print(median_of_medians_Place(A,len(A)//2))
-#print(median_of_medians_Place(C,len(C)//2))
