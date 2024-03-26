@@ -79,7 +79,7 @@ if __name__ == '__main__':
         n = int(A*(B**i))
         benchmark(median_of_medians_Place, n, nmax, timer_resolution),
         benchmark(Heap_select, n, nmax, timer_resolution),
-        benchmark(QuickSelectVariant, n, nmax, timer_resolution)
+        benchmark(quick_select, n, nmax, timer_resolution)
 
     # questo è il ciclo che calcola i tempi
     for i in range(iters):
@@ -88,7 +88,7 @@ if __name__ == '__main__':
         points[i]=(n,
                    benchmark(median_of_medians_Place, n, nmax, timer_resolution),
                    benchmark(Heap_select, n, nmax, timer_resolution),
-                   benchmark(QuickSelectVariant, n, nmax, timer_resolution))
+                   benchmark(quick_select, n, nmax, timer_resolution))
     # Estrai i valori per il plotting
     ns, times_median_of_medians, times_heap_select, times_quick_select_variant = zip(*points)
     
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     plt.figure(figsize=(10, 8))
     plt.plot(ns, times_median_of_medians, '-o', label='Median of Medians')
     plt.plot(ns, times_heap_select, '-o', label='Heap Select')
-    plt.plot(ns, times_quick_select_variant, '-o', label='Quick Select Variant')
+    plt.plot(ns, times_quick_select_variant, '-o', label='Quick Select')
     plt.xscale('log')
     plt.yscale('log')
     plt.xlabel('Array Size (n)')

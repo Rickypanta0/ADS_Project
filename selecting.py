@@ -236,11 +236,21 @@ def Heap_select(A,k):
     return H2.Heap_Extract()
 
 
-def QuickSelectVariant(A,k,start=0,end=None):
+def quick_select(A, k, start=0, end=None):
+    assert A is not None
+    assert 0 <= k < len(A)
+    assert 0 <= start < len(A)
+    assert end is None or start < end <= len(A)
+
     if end is None:
-        end=len(A)
-    if k-1<start or k-1>end or start > end:
-        return -float('inf')
+        end = len(A)
+
+    # usa partition nella versione standard, con l'ultimo elemento come pivot
+    p = partition(A, start=start, end=end)
+
+    if p == k:
+        return A[k]
+    elif p > k:
+        return quick_select(A, k, start=start, end=p)
     else:
-        #return selectT(A,k-1,p,q)  
-        return select(A,k-1,start=start,end=end)
+        return quick_select(A, k, start=p+1, end=end)
