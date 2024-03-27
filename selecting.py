@@ -45,20 +45,20 @@ def heap_select(A, k):
     return H2.Heap_Extract()
 
 
-def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
-    assert lst is not None
-    assert 0 <= start < len(lst)
-    assert (end is None) or (start < end <= len(lst))
+def median_of_medians_non_in_place(A, *, start=0, end=None, blocksize=5):
+    assert A is not None
+    assert 0 <= start < len(A)
+    assert (end is None) or (start < end <= len(A))
     assert blocksize > 0
 
-    """Calculate an approximate median of subarray lst[start:end).
+    """Calculate an approximate median of subarray A[start:end).
 
         Positional arguments:
-            lst      : the list to calculate the median of.
+            A      : the list to calculate the median of.
         Keyword arguments:
             start    : the starting point of the subarray; defaults to 0;
             end      : the ending point (NOT included) of the subarray; defaults
-                        to the length of lst;
+                        to the length of A;
             blocksize: the size of the blocks of elements sorted; defaults to 5.
 
 
@@ -72,11 +72,11 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
     # mediane.
 
     if end is None:
-        end = len(lst)
+        end = len(A)
 
     subarray_length = end - start
     if subarray_length == 1:
-        return lst[start]
+        return A[start]
 
     medians = []
 
@@ -88,27 +88,27 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
     for i in range(n_medians):
         block_start = start + i * blocksize
         block_end = min(block_start + blocksize, end)
-        insertionsort(lst, start=block_start, end=block_end)
+        insertionsort(A, start=block_start, end=block_end)
         median_position = (block_start + block_end) // 2
-        medians.append(lst[median_position])
+        medians.append(A[median_position])
 
     return median_of_medians_non_in_place(medians, blocksize=blocksize)
 
 
-def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
-    assert lst is not None
-    assert 0 <= start < len(lst)
-    assert (end is None) or (start < end <= len(lst))
+def median_of_medians_quasi_in_place(A, *, start=0, end=None, blocksize=5):
+    assert A is not None
+    assert 0 <= start < len(A)
+    assert (end is None) or (start < end <= len(A))
     assert blocksize > 0
 
-    """Calculate an approximate median of subarray lst[start:end).
+    """Calculate an approximate median of subarray A[start:end).
 
         Positional arguments:
-            lst      : the list to calculate the median of.
+            A      : the list to calculate the median of.
         Keyword arguments:
             start    : the starting point of the subarray; defaults to 0;
             end      : the ending point (NOT included) of the subarray; defaults
-                        to the length of lst;
+                        to the length of A;
             blocksize: the size of the blocks of elements sorted; defaults to 5.
 
         Return:
@@ -121,7 +121,7 @@ def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
     # ha dimensione 1, cioè quando contiene solo la mediana delle mediane.
 
     if end is None:
-        end = len(lst)
+        end = len(A)
 
     subarray_length = end - start
     if subarray_length == 1:
@@ -135,33 +135,33 @@ def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
     for i in range(n_medians):
         block_start = start + i * blocksize
         block_end = min(block_start + blocksize, end)
-        insertionsort(lst, start=block_start, end=block_end)
+        insertionsort(A, start=block_start, end=block_end)
         median_position = (block_start + block_end) // 2
-        lst[start+i], lst[median_position] = lst[median_position], lst[start+i]
+        A[start+i], A[median_position] = A[median_position], A[start+i]
 
     # Dato che le mediane vengono sempre spostate nella parte iniziale del
     # sottovettore start rimane inalterato; invece end diventa start+n_medians
     # perché sono state spostate esattamente n_medians mediane e quindi la parte
     # iniziale contenente le mediane è lunga n_medians.
-    return median_of_medians_quasi_in_place(lst, start=start,
+    return median_of_medians_quasi_in_place(A, start=start,
                                             end=start+n_medians,
                                             blocksize=blocksize)
 
 
-def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
-    assert lst is not None
-    assert 0 <= start < len(lst)
-    assert (end is None) or (start < end <= len(lst))
+def median_of_medians_in_place(A, *, start=0, end=None, blocksize=5):
+    assert A is not None
+    assert 0 <= start < len(A)
+    assert (end is None) or (start < end <= len(A))
     assert blocksize > 0
 
-    """Calculate an approximate median of subarray lst[start:end).
+    """Calculate an approximate median of subarray A[start:end).
 
         Positional arguments:
-            lst      : the list to calculate the median of.
+            A      : the list to calculate the median of.
         Keyword arguments:
             start    : the starting point of the subarray; defaults to 0;
             end      : the ending point (NOT included) of the subarray; defaults
-                        to the length of lst;
+                        to the length of A;
             blocksize: the size of the blocks of elements sorted; defaults to 5.
 
         Return:
@@ -171,7 +171,7 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
     # Versione iterativa di median_of_medians_quasi_in_place,
 
     if end is None:
-        end = len(lst)
+        end = len(A)
 
     while (subarray_length := end - start) > 1:
         # Il numero di mediane da calcolare è dato dal rapporto tra il numero di
@@ -182,9 +182,9 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
         for i in range(n_medians):
             block_start = start + i * blocksize
             block_end = min(block_start + blocksize, end)
-            insertionsort(lst, start=block_start, end=block_end)
+            insertionsort(A, start=block_start, end=block_end)
             median_position = (block_start + block_end) // 2
-            lst[start+i], lst[median_position] = lst[median_position], lst[start+i]
+            A[start+i], A[median_position] = A[median_position], A[start+i]
         end = start + n_medians # vedi commento nella versione quasi in-place
 
     assert subarray_length == 1 # guardia nel caso in cui il ciclo dovesse
@@ -192,35 +192,38 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
     return start
 
 
-def median_of_medians_select(lst, k, *, start=0, end=None):
-    assert lst is not None
-    assert 0 <= k < len(lst)
-    assert 0 <= start < len(lst)
-    assert end is None or start < end <= len(lst)
+def median_of_medians_select(A, k, *, start=0, end=None):
+    assert A is not None
+    assert 0 <= k < len(A)
+    assert 0 <= start < len(A)
+    assert end is None or start < end <= len(A)
 
-    """Select the kth smallest element in subarray lst[start:end)
+    """Select the kth smallest element in subarray A[start:end)
 
         Positional arguments:
-            lst     : the list to search;
+            A     : the list to search;
             k       : the position of the element to select.
         Keyword arguments:
             start   : the starting point of the subarray; defaults to 0;
             end     : the ending point (NOT included) of the subarray; defaults
-                        to len(lst)
+                        to len(A)
+
+        Return:
+            the selected element.
     """
 
     if end is None:
-        end = len(lst)
+        end = len(A)
 
-    median_of_medians_quasi_in_place(lst, start=start, end=end)
-    p = partition(lst, start=start, end=end, ppos=start)
+    median_of_medians_quasi_in_place(A, start=start, end=end)
+    p = partition(A, start=start, end=end, ppos=start)
 
     if p == k:
-        return lst[k]
+        return A[k]
     elif p > k:
-        return median_of_medians_select(lst, k, start=start, end=p)
+        return median_of_medians_select(A, k, start=start, end=p)
     else:
-        return median_of_medians_select(lst, k, start=p + 1, end=end)
+        return median_of_medians_select(A, k, start=p + 1, end=end)
 
 
 
