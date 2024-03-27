@@ -2,6 +2,49 @@ from sorting import *
 from Min_Max_heap import *
 import math
 
+def quick_select(A, k, start=0, end=None):
+    assert A is not None
+    assert 0 <= k < len(A)
+    assert 0 <= start < len(A)
+    assert end is None or start < end <= len(A)
+
+    if end is None:
+        end = len(A)
+
+    # usa partition nella versione standard, con l'ultimo elemento come pivot
+    p = partition(A, start=start, end=end)
+
+    if p == k:
+        return A[k]
+    elif p > k:
+        return quick_select(A, k, start=start, end=p)
+    else:
+        return quick_select(A, k, start=p+1, end=end)
+
+
+def heap_select(A, k):
+    if k <= (len(A) // 2):
+        H1 = MinHeap(A)
+        H1.Build_Heap()
+        H2 = MinHeap()
+    else:
+        H1 = MaxHeap(A)
+        H1.Build_Heap()
+        k = len(A) - k + 1
+        H2 = MaxHeap()
+    H2.Heap_Insert(H1.A[0])
+
+    for i in range(k-1):
+        root = H2.Heap_Extract()
+        left = H1.left(i)
+        right = H1.right(i)
+        if left <= H1.heapsize:
+            H2.Heap_Insert(H1.A[left])
+        if right <= H1.heapsize:
+            H2.Heap_Insert(H1.A[right])
+    return H2.Heap_Extract()
+
+
 def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
     assert lst is not None
     assert 0 <= start < len(lst)
@@ -50,7 +93,6 @@ def median_of_medians_non_in_place(lst, *, start=0, end=None, blocksize=5):
         medians.append(lst[median_position])
 
     return median_of_medians_non_in_place(medians, blocksize=blocksize)
-
 
 
 def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
@@ -106,7 +148,6 @@ def median_of_medians_quasi_in_place(lst, *, start=0, end=None, blocksize=5):
                                             blocksize=blocksize)
 
 
-
 def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
     assert lst is not None
     assert 0 <= start < len(lst)
@@ -151,7 +192,7 @@ def median_of_medians_in_place(lst, *, start=0, end=None, blocksize=5):
     return start
 
 
-def select(lst, k, *, start=0, end=None):
+def median_of_medians_select(lst, k, *, start=0, end=None):
     assert lst is not None
     assert 0 <= k < len(lst)
     assert 0 <= start < len(lst)
@@ -177,9 +218,11 @@ def select(lst, k, *, start=0, end=None):
     if p == k:
         return lst[k]
     elif p > k:
-        return select(lst, k, start=start, end=p)
+        return median_of_medians_select(lst, k, start=start, end=p)
     else:
-        return select(lst, k, start=p + 1, end=end)
+        return median_of_medians_select(lst, k, start=p + 1, end=end)
+
+
 
 def median_of_medians_Place(A, i, start=0, end=None):
     if end is None:
@@ -212,45 +255,3 @@ def median_of_medians_Place(A, i, start=0, end=None):
         return median_of_medians_Place(A, i - (pivot_index - start + 1), pivot_index + 1, end)
     else:  # i == pivot_index - start
         return A[pivot_index]
-
-
-def Heap_select(A,k):
-    if k<=(len(A)//2):
-        H1 = MinHeap(A)
-        H1.Build_Heap()
-        H2 = MinHeap()
-    else:
-        H1 = MaxHeap(A)
-        H1.Build_Heap()
-        k=len(A)-k+1
-        H2 = MaxHeap()
-    H2.Heap_Insert(H1.A[0])
-    for i in range(0, k-1):
-        root = H2.Heap_Extract()
-        left=H1.left(i)
-        right=H1.right(i)
-        if left<=H1.heapsize:
-            H2.Heap_Insert(H1.A[left])
-        if right<=H1.heapsize:
-            H2.Heap_Insert(H1.A[right])
-    return H2.Heap_Extract()
-
-
-def quick_select(A, k, start=0, end=None):
-    assert A is not None
-    assert 0 <= k < len(A)
-    assert 0 <= start < len(A)
-    assert end is None or start < end <= len(A)
-
-    if end is None:
-        end = len(A)
-
-    # usa partition nella versione standard, con l'ultimo elemento come pivot
-    p = partition(A, start=start, end=end)
-
-    if p == k:
-        return A[k]
-    elif p > k:
-        return quick_select(A, k, start=start, end=p)
-    else:
-        return quick_select(A, k, start=p+1, end=end)

@@ -45,25 +45,8 @@ def benchmark(algorithm, n, maxv, resolution, runs=3):
             gc.enable()                 # riabilita il garbage collector
         times.append(end_time - start_time)
     return sum(times) / len(times)
-"""
-# Parametri per il benchmarking
-nmin = 100
-nmax = 10000
-steps = 10
-maxv = 1000000
-timer_resolution = resolution()
-points = []
 
-# Calcola i vari 'n' per cui eseguire il benchmark
-n_values = [nmin + i*(nmax-nmin)//steps for i in range(steps + 1)]
 
-# Benchmarking
-for n in n_values:
-    time_median_of_medians = benchmark(median_of_mediansT, n, maxv, timer_resolution)
-    time_heap_select = benchmark(Heap_select, n, maxv, timer_resolution)
-    time_quick_select_variant = benchmark(QuickSelectVariant, n, maxv, timer_resolution)
-    points.append((n, time_median_of_medians, time_heap_select, time_quick_select_variant))
-"""
 if __name__ == '__main__':
 
     nmin=1000
@@ -75,10 +58,10 @@ if __name__ == '__main__':
     points = [[None, None,None, None,None]]*iters
 
     # questo ciclo serve per "scaldare i motori"
-    for i in range(iters-20, iters):
+    for i in range(iters-5, iters):
         n = int(A*(B**i))
-        benchmark(median_of_medians_Place, n, nmax, timer_resolution),
-        benchmark(Heap_select, n, nmax, timer_resolution),
+        benchmark(median_of_medians_select, n, nmax, timer_resolution),
+        benchmark(heap_select, n, nmax, timer_resolution),
         benchmark(quick_select, n, nmax, timer_resolution)
 
     # questo è il ciclo che calcola i tempi
@@ -86,15 +69,15 @@ if __name__ == '__main__':
         print(f"\r{i}", end='')
         n = int(A*(B**i))
         points[i]=(n,
-                   benchmark(median_of_medians_Place, n, nmax, timer_resolution),
-                   benchmark(Heap_select, n, nmax, timer_resolution),
+                   benchmark(median_of_medians_select, n, nmax, timer_resolution),
+                   benchmark(heap_select, n, nmax, timer_resolution),
                    benchmark(quick_select, n, nmax, timer_resolution))
     # Estrai i valori per il plotting
     ns, times_median_of_medians, times_heap_select, times_quick_select_variant = zip(*points)
     
     # Grafico
     plt.figure(figsize=(10, 8))
-    plt.plot(ns, times_median_of_medians, '-o', label='Median of Medians')
+    plt.plot(ns, times_median_of_medians, '-o', label='Median of Medians Select')
     plt.plot(ns, times_heap_select, '-o', label='Heap Select')
     plt.plot(ns, times_quick_select_variant, '-o', label='Quick Select')
     plt.xscale('log')
