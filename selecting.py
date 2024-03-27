@@ -1,25 +1,7 @@
 from sorting import *
 from Min_Max_heap import *
 import math
-
-def quick_select(A, k, start=0, end=None):
-    assert A is not None
-    assert 0 <= k < len(A)
-    assert 0 <= start < len(A)
-    assert end is None or start < end <= len(A)
-
-    if end is None:
-        end = len(A)
-
-    # usa partition nella versione standard, con l'ultimo elemento come pivot
-    p = partition(A, start=start, end=end)
-
-    if p == k:
-        return A[k]
-    elif p > k:
-        return quick_select(A, k, start=start, end=p)
-    else:
-        return quick_select(A, k, start=p+1, end=end)
+from functools import partial
 
 
 def heap_select(A, k):
@@ -192,22 +174,25 @@ def median_of_medians_in_place(A, *, start=0, end=None, blocksize=5):
     return start
 
 
-def median_of_medians_select(A, k, *, start=0, end=None):
+def select(A, k, *, start=0, end=None, pfunc):
     assert A is not None
     assert 0 <= k < len(A)
     assert 0 <= start < len(A)
     assert end is None or start < end <= len(A)
 
-    """Select the kth smallest element in subarray A[start:end)
+    """Select the kth smallest element in list A.
 
         Positional arguments:
             A     : the list to search;
             k       : the position of the element to select.
         Keyword arguments:
-            start   : the starting point of the subarray; defaults to 0;
-            end     : the ending point (NOT included) of the subarray; defaults
-                        to len(A)
-
+            start   : the starting point of the portion of A to consider;
+                        defaults to 0;
+            end     : the ending point (NOT included) of the portion of A to
+                        consider; defaults to len(A);
+            pfunc   : a function which returns the position of the pivot for the
+                        partitioning; this function must accept two keyword
+                        arguments: start and end.
         Return:
             the selected element.
     """
@@ -215,46 +200,27 @@ def median_of_medians_select(A, k, *, start=0, end=None):
     if end is None:
         end = len(A)
 
-    median_of_medians_quasi_in_place(A, start=start, end=end)
-    p = partition(A, start=start, end=end, ppos=start)
+    ppos = pfunc(A, start=start, end=end)
+    p = partition(A, start=start, end=end, ppos=ppos)
 
     if p == k:
         return A[k]
     elif p > k:
-        return median_of_medians_select(A, k, start=start, end=p)
+        return select(A, k, start=start, end=p, pfunc=pfunc)
     else:
-        return median_of_medians_select(A, k, start=p + 1, end=end)
+        return select(A, k, start=p+1, end=end, pfunc=pfunc)
 
 
+# funzione "fantoccio" che ritorna sempre end-1 (ultima posizione della lista)
+# come posizione del pivot
+def _standard_pfunc(A, *, start, end):
+    return end - 1
 
-def median_of_medians_Place(A, i, start=0, end=None):
-    if end is None:
-        end = len(A)
-    if end - start <= 5:
-        end=min(len(A), end+1)
-        A[start:end] = sorted(A[start:end])  # Ordina se meno di 5 elementi
-        return A[i+start]  # Restituisce l'i-esimo elemento
-    
-    # Step 1: Organizza le mediane dei blocchi di 5 all'inizio dell'array
-    medians_index = start
-    for sub_start in range(start, end, 5):
-        median_pos = insertion_sort_5(A, sub_start, min(end, sub_start+4))
-        A[medians_index], A[median_pos] = A[median_pos], A[medians_index]
-        medians_index += 1
-    
-    # Step 2: Trova la mediana delle mediane utilizzando la stessa funzione ricorsiva
-    mid = math.ceil((medians_index-start)//2)
-    pivot = median_of_medians_Place(A, mid, start, medians_index-1)
-    # Step 3: Usa il pivot per partizionare l'array
-    pivot_position = start + A[start:end].index(pivot)
-    pivot_index = partitionT(A, start=start, end=end, ppos=pivot_position)
+# quick select si ottiene usando _standard_pfunc come funzione per trovare il
+# pivot
+quick_select = partial(select, pfunc=_standard_pfunc)
 
-    # Step 4: Ricorsione sul partizionamento corretto
-    if i < pivot_index - start:
-        #min(i,pivot_index-2) questo perchè mi andava a selezionare un elemento all'esterno
-        #dell'intervallo desiderato
-        return median_of_medians_Place(A,i, start, pivot_index-1)
-    elif i > pivot_index - start:
-        return median_of_medians_Place(A, i - (pivot_index - start + 1), pivot_index + 1, end)
-    else:  # i == pivot_index - start
-        return A[pivot_index]
+# medians of medians select si ottiene usando la funzione per la mediana delle
+# mediane come funzione per trovare il pivot
+median_of_medians_select = partial(select,
+                                   pfunc=median_of_medians_quasi_in_place)

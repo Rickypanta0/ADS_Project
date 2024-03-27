@@ -2,6 +2,7 @@
 
 import unittest
 from graphs_maker import generate_input
+from selecting import quick_select
 from selecting import median_of_medians_select
 from selecting import median_of_medians_non_in_place
 from selecting import median_of_medians_quasi_in_place
@@ -27,6 +28,12 @@ class SelectTest(unittest.TestCase):
                 copy = self.generated_input.copy()
                 self.assertEqual(median_of_medians_select(copy, k),
                                  self.sorted_input[k])
+
+    def test_quick_select(self):
+        for k in range(self.n):
+            with self.subTest(i=k):
+                copy = self.generated_input.copy()
+                self.assertEqual(quick_select(copy, k), self.sorted_input[k])
 
     def test_median_of_medians_quasi_in_place(self):
         copy = self.generated_input.copy()

@@ -65,8 +65,8 @@ def compute_points(*, nmin, nmax, iters):
     points = [[None, None, None, None]] * iters
 
     # questo ciclo serve per "scaldare i motori"
+    print("Scaldando i motori...")
     for i in range(iters-5, iters):
-        print(f"Scaldando i motori...")
         n = int(nmin * base_step ** i)
         benchmark(median_of_medians_select, n, nmax, minimum_measurable_time),
         benchmark(heap_select, n, nmax, minimum_measurable_time),
