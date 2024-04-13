@@ -1,137 +1,67 @@
-def partition(lst, *, start=0, end=None, ppos=None):
-    """Partition lst.
+def partition(A, *, start=0, end=None, ppos=None):
+    assert A is not None
+    assert 0 <= start < len(A)
+    assert end is None or start < end <= len(A)
+    assert ppos is None or start <= ppos < end
+
+    """Partition A.
 
     Positional arguments:
-        lst  : the list to parition
+        A    : the list to partition.
     Keyword arguments:
-        start: partition lst from this position; ignore what's before.
-        end  : partition lst up until this position not included;
-                defaults to the length of lst.
-        ppos : use the element at this position as the pivot; default
-                to the last element of lst.
+        start: partition A from this position; ignore what's before;
+                defaults to 0;
+        end  : partition A up until this position NOT included; ignore
+                what's after; defaults to the length of A;
+        ppos : use the element at this position as the pivot; defaults
+                to the last element of A.
     """
 
     if end is None:
-        end = len(lst)
-
-    if start >= end:
-        return
+        end = len(A)
 
     if ppos is None:
         ppos = end - 1
 
-    pivot = lst[ppos]
-    lst[ppos], lst[end - 1] = lst[end - 1], lst[ppos]
+    pivot = A[ppos]
+    A[ppos], A[end - 1] = A[end - 1], A[ppos]
 
-    # if start <= k < i then lst[k] <= pivot
-    # if i < k <= j     then lst[k] > pivot
+    # if start <= k < i then A[k] <= pivot
+    # if i < k <= j     then A[k] > pivot
 
     i = start
     for j in range(start, end):
-        if lst[j] <= pivot:
-            lst[j], lst[i] = lst[i], lst[j]
+        if A[j] <= pivot:
+            A[j], A[i] = A[i], A[j]
             i = i + 1
 
     return i - 1
 
 
 # Used in medianofmedians to sort the fixed-size lists
-def insertionsort(lst, *, start=0, end=None):
-    """Sort lst.
+def insertionsort(A, *, start=0, end=None):
+    assert A is not None
+    assert 0 <= start < len(A)
+    assert end is None or start < end <= len(A)
+
+    """Sort A.
 
     Position arguments:
-        lst  : the list to sort.
+        A    : the list to sort.
     Keyword arguments:
-        start: start sorting from this position.
-        end  : stop sorting at this position not included.
+        start: start sorting from this position; ignore what's before;
+                defaults to 0;
+        end  : stop sorting at this position NOT included; ignore
+                what's after; defaults to the length of A.
     """
 
     if end is None:
-        end = len(lst)
+        end = len(A)
 
-    if start >= end:
-        return
-
-    for j in range(start, end):
-        k = lst[j]
+    for j in range(start + 1, end):
+        k = A[j]
         i = j - 1
-        while i >= start and k <= lst[i]:
-            lst[i+1] = lst[i]
+        while i >= start and k <= A[i]:
+            A[i + 1] = A[i]
             i = i - 1
-        lst[i+1] = k
-
-def insertion_sort_5(A, start,end):
-    """Sort A from start to max(len(A),start+5)
-
-    Args:
-        A : the list to sort
-        start : start sorting from this position
-
-    Returns:
-        _type_: the location of the median belong to the sublist (start+2)
-    """
-    end = min(end+1, len(A))
-    for i in range(start, end):
-        key = A[i]
-        j = i - 1
-        while j >= start and key < A[j]:
-            A[j + 1] = A[j]
-            j -= 1
-        A[j + 1] = key
-    return start + 2 if end>=start+4 else min(len(A)-1, start+1 )  # posizione della mediana in un blocco di 5 elementi
-
-def partitionT(A, start=0, end=None, ppos=None):
-    """Partiziona l'array A da start a end compreso intorno all'elemento in ppos.
-    Modifica l'array in place e restituisce il nuovo indice del pivot."""
-
-    if end is None or end > len(A) - 1:
-        end = len(A) - 1  # Assicura che end sia l'ultimo indice valido
-
-    # Sposta il pivot all'ultimo elemento (se ppos non è già end)
-    if ppos is not None and ppos != end:
-        A[ppos], A[end] = A[end], A[ppos]
-    pivot = A[end]
-
-    i = start - 1
-    for j in range(start, end):  # Cicla fino a end - 1 poiché end è ora l'ultimo elemento
-        if A[j] <= pivot:
-            i += 1
-            A[i], A[j] = A[j], A[i]
-    
-    # Sposta il pivot nella sua posizione corretta
-    A[i + 1], A[end] = A[end], A[i + 1]
-    return i + 1  # Restituisce il nuovo indice del pivot
-
-def median_of_mediansT(A, i,start=0, end=None):
-    if end is None:
-        end=len(A)
-    """Median of medians used for tests
-
-    Args:
-        A : array
-        i : index
-
-    Returns:
-        elemento nell'indice i post ordinamento
-    """
-    #divide A into sublists of len 5
-    sublists = [A[j:j+5] for j in range(0, len(A), 5)]
-    medians = [sorted(sublist)[len(sublist)//2] for sublist in sublists]
-    if len(medians) <= 5:
-        pivot = sorted(medians)[len(medians)//2]
-    else:
-        #the pivot is the median of the medians
-        pivot = median_of_mediansT(medians, len(medians)//2)
-
-    #partitioning step
-    low = [j for j in A if j < pivot]
-    equals = [j for j in A if j == pivot]  # Elementi uguali al pivot
-    high = [j for j in A if j > pivot]
-
-    k = len(low)
-    if i < k:
-        return median_of_mediansT(low, i)
-    elif i < k + len(equals):  # i è all'interno degli elementi uguali al pivot
-        return pivot  # Tutti gli elementi in equals sono uguali a pivot
-    else:  # i è nella parte alta
-        return median_of_mediansT(high, i - k - len(equals))
+        A[i + 1] = k
