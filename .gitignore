@@ -7,3 +7,5 @@ ADS_relazione.pdf
 
 # file ausiliari generati da python
 *.pyc
+
+.DS_Store
