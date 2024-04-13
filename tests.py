@@ -7,6 +7,7 @@ from selecting import median_of_medians_select
 from selecting import median_of_medians_non_in_place
 from selecting import median_of_medians_quasi_in_place
 from selecting import median_of_medians_in_place
+from selecting import heap_select
 
 class SelectTest(unittest.TestCase):
 
@@ -34,6 +35,12 @@ class SelectTest(unittest.TestCase):
             with self.subTest(i=k):
                 copy = self.generated_input.copy()
                 self.assertEqual(quick_select(copy, k), self.sorted_input[k])
+
+    def test_heap_select(self):
+        for k in range(100):
+            with self.subTest(i=k):
+                copy = self.generated_input.copy()
+                self.assertEqual(heap_select(copy, k), self.sorted_input[k])
 
     def test_median_of_medians_quasi_in_place(self):
         copy = self.generated_input.copy()
