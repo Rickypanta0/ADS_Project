@@ -1,11 +1,11 @@
 import time
-import matplotlib.pyplot as plt
-from selecting import *
-import time
 import random
-import math
 import gc
-from sorting import *
+
+import matplotlib.pyplot as plt
+
+from selecting import quick_select, median_of_medians_select, heap_select
+
 
 def get_timer_resolution():
     """Determina la risoluzione del timer."""
