@@ -3,12 +3,10 @@ class Heap:
         self.A = A if A is not None else []
         self.heapsize = len(self.A) - 1
 
-    @staticmethod
-    def right(i):
+    def right(self, i):
         return 2 * i + 2
 
-    @staticmethod
-    def left(i):
+    def left(self, i):
         return 2 * i + 1
 
     def parent(self, i):
