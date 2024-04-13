@@ -6,26 +6,28 @@ from Min_Max_heap import MinHeap, MaxHeap
 
 
 def heap_select(A, k):
+    assert A is not None
+    assert 0 <= k < len(A)
+
     if k <= (len(A) // 2):
         H1 = MinHeap(A)
-        H1.Build_Heap()
         H2 = MinHeap()
     else:
         H1 = MaxHeap(A)
-        H1.Build_Heap()
         k = len(A) - k + 1
         H2 = MaxHeap()
-    H2.Heap_Insert(H1.A[0])
+    H1.build()
+    H2.insert(H1.A[0])
 
     for i in range(k - 1):
-        H2.Heap_Extract()
+        H2.extract()
         left = H1.left(i)
         right = H1.right(i)
         if left <= H1.heapsize:
-            H2.Heap_Insert(H1.A[left])
+            H2.insert(H1.A[left])
         if right <= H1.heapsize:
-            H2.Heap_Insert(H1.A[right])
-    return H2.Heap_Extract()
+            H2.insert(H1.A[right])
+    return H2.extract()
 
 
 def median_of_medians_non_in_place(A, *, start=0, end=None, blocksize=5):
