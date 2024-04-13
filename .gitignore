@@ -8,4 +8,6 @@ ADS_relazione.pdf
 # file ausiliari generati da python
 *.pyc
 
+pyproject.toml
+
 .DS_Store
