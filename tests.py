@@ -37,7 +37,7 @@ class SelectTest(unittest.TestCase):
                 self.assertEqual(quick_select(copy, k), self.sorted_input[k])
 
     def test_heap_select(self):
-        for k in range(100):
+        for k in range(self.n):
             with self.subTest(i=k):
                 copy = self.generated_input.copy()
                 self.assertEqual(heap_select(copy, k), self.sorted_input[k])
