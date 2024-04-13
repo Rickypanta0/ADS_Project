@@ -57,7 +57,8 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3):
         if final_time > minimum_measurable_time:
             times.append(final_time)
             i = i + 1
-    return sum(times) / len(times)
+    return min(times)
+    # return sum(times) / len(times)
 
 
 def compute_points(*, nmin, nmax, iters):
@@ -70,12 +71,12 @@ def compute_points(*, nmin, nmax, iters):
     points = [[None, None, None, None]] * iters
 
     # questo ciclo serve per "scaldare i motori"
-    print("Scaldando i motori...")
-    for i in range(iters - 5, iters):
-        n = int(nmin * base_step**i)
-        benchmark(median_of_medians_select, n, nmax, minimum_measurable_time),
-        benchmark(heap_select, n, nmax, minimum_measurable_time),
-        benchmark(quick_select, n, nmax, minimum_measurable_time)
+    # print("Scaldando i motori...")
+    # for i in range(iters - 5, iters):
+    #     n = int(nmin * base_step**i)
+    #     benchmark(median_of_medians_select, n, nmax, minimum_measurable_time),
+    #     benchmark(heap_select, n, nmax, minimum_measurable_time),
+    #     benchmark(quick_select, n, nmax, minimum_measurable_time)
 
     # questo è il ciclo che calcola i tempi
     for i in range(iters):
