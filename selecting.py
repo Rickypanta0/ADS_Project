@@ -11,23 +11,23 @@ def heap_select(A, k):
 
     if k <= (len(A) // 2):
         H1 = MinHeap(A)
-        H2 = MinHeap()
+        H2 = MinHeap(compkey=lambda x: x[0])
     else:
         H1 = MaxHeap(A)
-        k = len(A) - k + 1
-        H2 = MaxHeap()
+        k = len(A) - k - 1
+        H2 = MaxHeap(compkey=lambda x: x[0])
     H1.build()
-    H2.insert(H1.A[0])
+    H2.insert((H1.A[0], 0))
 
-    for i in range(k - 1):
-        H2.extract()
+    for _ in range(k):
+        r, i = H2.extract()
         left = H1.left(i)
         right = H1.right(i)
         if left <= H1.heapsize:
-            H2.insert(H1.A[left])
+            H2.insert((H1.A[left], left))
         if right <= H1.heapsize:
-            H2.insert(H1.A[right])
-    return H2.extract()
+            H2.insert((H1.A[right], right))
+    return H2.extract()[0]
 
 
 def median_of_medians_non_in_place(A, *, start=0, end=None, blocksize=5):

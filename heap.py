@@ -1,7 +1,9 @@
 class Heap:
-    def __init__(self, A=None) -> None:
+
+    def __init__(self, A=None, *, compkey=lambda x: x):
         self.A = A if A is not None else []
         self.heapsize = len(self.A) - 1
+        self.compkey = compkey
 
     def right(self, i):
         return 2 * i + 2

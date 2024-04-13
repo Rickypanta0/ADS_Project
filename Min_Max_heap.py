@@ -6,11 +6,11 @@ class MinHeap(Heap):
     def heapify(self, i):
         r = self.right(i)
         l = self.left(i)
-        if self.heapsize >= r and self.A[i] > self.A[r]:
+        if self.heapsize >= r and self.compkey(self.A[i]) > self.compkey(self.A[r]):
             m = r
         else:
             m = i
-        if self.heapsize >= l and self.A[m] > self.A[l]:
+        if self.heapsize >= l and self.compkey(self.A[m]) > self.compkey(self.A[l]):
             m = l
         if m != i:
             self.swap(i, m)
@@ -31,7 +31,9 @@ class MinHeap(Heap):
             self.heapsize += 1
             self.A.append(k)
             i = self.heapsize
-            while i > 0 and self.A[i] < self.A[self.parent(i)]:
+            while i > 0 and self.compkey(self.A[i]) < self.compkey(
+                self.A[self.parent(i)]
+            ):
                 self.swap(i, self.parent(i))
                 i = self.parent(i)
 
@@ -44,10 +46,10 @@ class MinHeap(Heap):
         left = self.left(i)
         right = self.right(i)
         if left <= self.heapsize:
-            cond = cond and (self.A[i] <= self.A[left])
+            cond = cond and (self.compkey(self.A[i]) <= self.compkey(self.A[left]))
             cond = cond and self.verify(left)
         if right <= self.heapsize:
-            cond = cond and (self.A[i] <= self.A[right])
+            cond = cond and (self.compkey(self.A[i]) <= self.compkey(self.A[right]))
             cond = cond and self.verify(right)
         return cond
 
@@ -57,11 +59,11 @@ class MaxHeap(Heap):
     def heapify(self, i):
         r = self.right(i)
         l = self.left(i)
-        if self.heapsize >= r and self.A[i] < self.A[r]:
+        if self.heapsize >= r and self.compkey(self.A[i]) < self.compkey(self.A[r]):
             m = r
         else:
             m = i
-        if self.heapsize >= l and self.A[m] < self.A[l]:
+        if self.heapsize >= l and self.compkey(self.A[m]) < self.compkey(self.A[l]):
             m = l
         if m != i:
             self.swap(i, m)
@@ -82,7 +84,9 @@ class MaxHeap(Heap):
             self.heapsize += 1
             self.A.append(k)
             i = self.heapsize
-            while i > 0 and self.A[i] > self.A[self.parent(i)]:
+            while i > 0 and self.compkey(self.A[i]) > self.compkey(
+                self.A[self.parent(i)]
+            ):
                 self.swap(i, self.parent(i))
                 i = self.parent(i)
 
@@ -95,10 +99,9 @@ class MaxHeap(Heap):
         left = self.left(i)
         right = self.right(i)
         if left <= self.heapsize:
-            cond = cond and (self.A[i] >= self.A[left])
+            cond = cond and (self.compkey(self.A[i]) >= self.compkey(self.A[left]))
             cond = cond and self.verify(left)
         if right <= self.heapsize:
-            cond = cond and (self.A[i] >= self.A[right])
+            cond = cond and (self.compkey(self.A[i]) >= self.compkey(self.A[right]))
             cond = cond and self.verify(right)
         return cond
-
