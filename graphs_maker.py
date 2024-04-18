@@ -41,13 +41,13 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3):
     i = 0
     while i < runs:
         A = generate_input(n, maxv)
-        # k = random.randint(1, len(A))  # Sceglie un k casuale per ogni esecuzione
+        #k = random.randint(1, len(A))  # Sceglie un k casuale per ogni esecuzione
         if gc.isenabled():
             gc.disable()  # disabilita il garbage collector
         start_time = time.monotonic()
-        # algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
-        # algorithm(A, len(A)-1)
-        algorithm(A, len(A) // 2)
+        #algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
+        algorithm(A, len(A)-1)
+        #algorithm(A, len(A) // 2)
         end_time = time.monotonic()
         if not gc.isenabled():
             gc.enable()  # riabilita il garbage collector
@@ -103,20 +103,26 @@ def plot(points):
     ) = zip(*points)
 
     # Grafico
-    plt.figure(figsize=(10, 8))
-    plt.plot(
-        n,
-        times_median_of_medians_select,
-        "-o",
-        label="Median of Medians Select",
-    )
+    plt.figure(figsize=(15, 8))
+    plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Select",)
+    plt.plot(n, times_heap_select, "-o", label="Heap Select")
+    plt.plot(n, times_quick_select, "-o", label="Quick Select")
+    plt.xlabel("Array Size (n)")
+    plt.ylabel("Time (seconds)")
+    plt.title("Benchmarking con k agli estremi")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    
+    plt.figure(figsize=(15, 8))
+    plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Select",)
     plt.plot(n, times_heap_select, "-o", label="Heap Select")
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
     plt.xscale("log")
     plt.yscale("log")
-    plt.xlabel("Array Size (n)")
-    plt.ylabel("Time (seconds)")
-    plt.title("Benchmarking Selection Algorithms")
+    plt.xlabel("Array Size (n) (scala logaritmica)")
+    plt.ylabel("Time (seconds) (scala logaritmica)")
+    plt.title("Benchmarking con k agli estremi")
     plt.legend()
     plt.grid(True)
     plt.show()
