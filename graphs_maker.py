@@ -1,7 +1,7 @@
 import time
 import random
 import gc
-
+import numpy as np
 import matplotlib.pyplot as plt
 
 from selecting import quick_select, median_of_medians_select, heap_select
@@ -27,7 +27,7 @@ def generate_input(n, max_value):
     return [random.randint(0, max_value) for _ in range(n)]
 
 
-def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3):
+def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3,iter=0):
     """
     Utilizzi:
     - usare k random:
@@ -46,8 +46,9 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3):
             gc.disable()  # disabilita il garbage collector
         start_time = time.monotonic()
         #algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
-        algorithm(A, len(A)-1)
+        #algorithm(A, len(A)-1)
         #algorithm(A, len(A) // 2)
+        algorithm(A,iter-1)
         end_time = time.monotonic()
         if not gc.isenabled():
             gc.enable()  # riabilita il garbage collector
@@ -79,16 +80,25 @@ def compute_points(*, nmin, nmax, iters):
     #     benchmark(quick_select, n, nmax, minimum_measurable_time)
 
     # questo è il ciclo che calcola i tempi
+    n=10000
+    base=(n-1)**(1/(iters-1))
+    k_values = np.exp(np.linspace(np.log(1), np.log(np.log(n)), num=iters))
+    k_values = np.ceil(n / np.exp(k_values - 1)).astype(int)
+    #for k,i in zip(k_values, range(iters)):
     for i in range(iters):
         print(f"\r{i}", end="")
-        n = int(nmin * base_step**i)
+        #n = int(nmin * base_step**i)
+        #print(k_t)
+        #k = int(1 * (base ** i))
+        #print(k)
+        #if k > n:  # Assicurati che k non superi il massimo valore desiderato
+        #    k = n
         points[i] = (
-            n,
-            benchmark(
-                median_of_medians_select, n, nmax, minimum_measurable_time
-            ),
-            benchmark(heap_select, n, nmax, minimum_measurable_time),
-            benchmark(quick_select, n, nmax, minimum_measurable_time),
+            #n,
+            i*100,
+            benchmark(median_of_medians_select, n, nmax, minimum_measurable_time,iter=i),
+            benchmark(heap_select, n, nmax, minimum_measurable_time,iter=i),
+            benchmark(quick_select, n, nmax, minimum_measurable_time,iter=i),
         )
 
     return points
@@ -107,9 +117,9 @@ def plot(points):
     plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Select",)
     plt.plot(n, times_heap_select, "-o", label="Heap Select")
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
-    plt.xlabel("Array Size (n)")
+    plt.xlabel("Indice k")
     plt.ylabel("Time (seconds)")
-    plt.title("Benchmarking con k agli estremi")
+    plt.title("Benchmarking con n=10000 fissato e varia k")
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -120,9 +130,9 @@ def plot(points):
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
     plt.xscale("log")
     plt.yscale("log")
-    plt.xlabel("Array Size (n) (scala logaritmica)")
+    plt.xlabel("Indice k (scala logaritmica)")
     plt.ylabel("Time (seconds) (scala logaritmica)")
-    plt.title("Benchmarking con k agli estremi")
+    plt.title("Benchmarking con n=10000 fissato e varia k")
     plt.legend()
     plt.grid(True)
     plt.show()
