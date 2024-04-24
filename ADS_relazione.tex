@@ -4,6 +4,7 @@
 % immagini
 \usepackage{graphicx}
 \usepackage{svg}
+\usepackage{amsthm}
 
 % matematica
 \usepackage{amsmath}
@@ -81,6 +82,11 @@ Sono proposti tre diversi approcci:
 \end{enumerate}
 In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \( O(n) \).
 \\
+\subsection{Algoritmo per la generazione dei vettori}
+La lunghezza n dell'array è compresa tra [100,100000].
+A tale scopo, è possibile utilizzare un ciclo for con un indice $i$=0,...,99, e attraverso una funzione esponenziale di $i$ per generare le lunghezze n
+, $n_i=\lfloor A*B^i\rfloor$ , dove A e B sono costanti in virgola mobile.\\
+Nel nostro caso \[n_i=\lfloor A*B^i\rfloor, A=100, B=10000^{\frac{1}{100-1}},i=0,...,99\]
 \section{Misurazione dei tempi di esecuzione}
 La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero un numero di volte tale da garantire un errore massimo relativo pari a \( f_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{f} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
 
@@ -93,12 +99,17 @@ Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array ge
             \includegraphics[width=.83\textwidth]{graphs/K_const_n.png}
             \includegraphics[width=.83\textwidth]{graphs/K_const_2xlog.png}
 \end{figure}
+Come si può notare dai grafici, con $k=\frac{n}{2}$ l'algoritmo $HeapSelect$ risulta essere quello con prestazioni peggiori tra i tre assumendo un andamento dell'oridine di $klogk$.
+$Medians\ Of\ Medians$ e $Quick\ Select$ hanno entrambi complessita $O(n)$ però $MoM$ ha un andamento peggiore a causa degli ulteriori calcoli per determinare la mediana delle mediane.\\
 \newpage
 \begin{figure}[h]
             \centering
             \includegraphics[width=.83\textwidth]{graphs/K_last_n.png}
             \includegraphics[width=.83\textwidth]{graphs/K_last_2xlog.png}
 \end{figure}
+Come si evince dal grafico nel caso in cui $k$ risulti posizionarisi a uno dei due estremi del vettore implica un netto miglioramento delle perfomance da parte di $Heap\ Select$.\\
+Questo è dovuto dal fatto come spiegato nella sezione 2.1 che a seconda della posizione di k se $k\in[0,\frac{n}{2}]$ viene adottata una MinHeap mentre se $k\in[\frac{n}{2}+1,n-1]$ viene utilizzata un MaxHeap, adottando un andamento lineare.\\
+Mentre gli andamenti di $MoM$ e $Quick\ Select$ rimangono invarianti.\\
 \newpage
 \subsection{Caso k random}
 \begin{figure}[h]
@@ -106,4 +117,16 @@ Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array ge
             \includegraphics[width=.83\textwidth]{graphs/K_random_n.png}
             \includegraphics[width=.83\textwidth]{graphs/K_random_2xlog.png}
 \end{figure}
+Dai grafici soprastanti e da quelli precedente mostrati si rende ancora più evidente la quasi indipendenza di $MoM$ e $Quick\ Select$ dalla posizione di k. Al contrario invece si evidenzia la netta dipendenza della complessità di $Heap\ Select$ dovuta dalla posizione di k e in questo caso la sua imprevedibilità.\\
+\newpage
+\subsection{Caso n fissato e k variato}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.83\textwidth]{graphs/n_fisso/np.png}
+    \includegraphics[width=.83\textwidth]{graphs/n_fisso/np2.png}
+\end{figure}
+Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, raggiungendo il massimo globale quando $k=\frac{n}{2}$ andandosi ad allineare con $MoM$ all avvicinarsi agli estremi del vettore. Riguardo ad $Quick\ Select$ e $MoM$ non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.\\
+\newpage
+\section{Confronto tra MoM}
+
 \end{document}
