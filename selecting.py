@@ -230,5 +230,4 @@ quick_select = partial(select, pfunc=_standard_pfunc)
 
 # medians of medians select si ottiene usando la funzione per la mediana delle
 # mediane come funzione per trovare il pivot
-median_of_medians_select = partial(select,
-                                   pfunc=median_of_medians_quasi_in_place)
+median_of_medians_select = partial(select, pfunc=median_of_medians_quasi_in_place)

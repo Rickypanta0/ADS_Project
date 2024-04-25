@@ -16,4 +16,3 @@ class Heap:
 
     def swap(self, i, j):
         self.A[i], self.A[j] = self.A[j], self.A[i]
-

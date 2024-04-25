@@ -27,7 +27,7 @@ def generate_input(n, max_value):
     return [random.randint(0, max_value) for _ in range(n)]
 
 
-def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3,iter=0):
+def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3, iter=0):
     """
     Utilizzi:
     - usare k random:
@@ -41,13 +41,13 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3,iter=0):
     i = 0
     while i < runs:
         A = generate_input(n, maxv)
-        #k = random.randint(1, len(A))  # Sceglie un k casuale per ogni esecuzione
+        # k = random.randint(1, len(A))  # Sceglie un k casuale per ogni esecuzione
         if gc.isenabled():
             gc.disable()  # disabilita il garbage collector
         start_time = time.monotonic()
-        #algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
-        #algorithm(A, len(A)-1)
-        #algorithm(A, len(A) // 2)
+        # algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
+        # algorithm(A, len(A)-1)
+        # algorithm(A, len(A) // 2)
         algorithm(A, iter)
         end_time = time.monotonic()
         if not gc.isenabled():
@@ -64,41 +64,32 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3,iter=0):
 
 def compute_points(*, nmin, nmax, iters):
     timer_resolution = get_timer_resolution()
-    minimum_measurable_time = get_minimum_measurable_time(
-        0.001, timer_resolution
-    )
+    minimum_measurable_time = get_minimum_measurable_time(0.001, timer_resolution)
 
     base_step = (nmax / nmin) ** (1 / (iters - 1))
     points = [[None, None, None, None]] * iters
 
-    # questo ciclo serve per "scaldare i motori"
-    # print("Scaldando i motori...")
-    # for i in range(iters - 5, iters):
-    #     n = int(nmin * base_step**i)
-    #     benchmark(median_of_medians_select, n, nmax, minimum_measurable_time),
-    #     benchmark(heap_select, n, nmax, minimum_measurable_time),
-    #     benchmark(quick_select, n, nmax, minimum_measurable_time)
-
-    # questo è il ciclo che calcola i tempi
-    n=10000
-    base=(n-1)**(1/(iters-1))
+    n = 10000
+    base = (n - 1) ** (1 / (iters - 1))
     k_values = np.exp(np.linspace(np.log(1), np.log(np.log(n)), num=iters))
     k_values = np.ceil(n / np.exp(k_values - 1)).astype(int)
-    #for k,i in zip(k_values, range(iters)):
+    # for k,i in zip(k_values, range(iters)):
     for i in range(iters):
         print(f"\r{i}", end="")
-        #n = int(nmin * base_step**i)
-        #print(k_t)
-        #k = int(1 * (base ** i))
-        #print(k)
-        #if k > n:  # Assicurati che k non superi il massimo valore desiderato
+        # n = int(nmin * base_step**i)
+        # print(k_t)
+        # k = int(1 * (base ** i))
+        # print(k)
+        # if k > n:  # Assicurati che k non superi il massimo valore desiderato
         #    k = n
         points[i] = (
-            #n,
-            i*100,
-            benchmark(median_of_medians_select, n, nmax, minimum_measurable_time,iter=i),
-            benchmark(heap_select, n, nmax, minimum_measurable_time,iter=i),
-            benchmark(quick_select, n, nmax, minimum_measurable_time,iter=i),
+            # n,
+            i * 100,
+            benchmark(
+                median_of_medians_select, n, nmax, minimum_measurable_time, iter=i
+            ),
+            benchmark(heap_select, n, nmax, minimum_measurable_time, iter=i),
+            benchmark(quick_select, n, nmax, minimum_measurable_time, iter=i),
         )
 
     return points
@@ -114,7 +105,12 @@ def plot(points):
 
     # Grafico
     plt.figure(figsize=(15, 8))
-    plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Select",)
+    plt.plot(
+        n,
+        times_median_of_medians_select,
+        "-o",
+        label="Median of Medians Select",
+    )
     plt.plot(n, times_heap_select, "-o", label="Heap Select")
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
     plt.xlabel("Indice k")
@@ -123,9 +119,14 @@ def plot(points):
     plt.legend()
     plt.grid(True)
     plt.show()
-    
+
     plt.figure(figsize=(15, 8))
-    plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Select",)
+    plt.plot(
+        n,
+        times_median_of_medians_select,
+        "-o",
+        label="Median of Medians Select",
+    )
     plt.plot(n, times_heap_select, "-o", label="Heap Select")
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
     plt.xscale("log")

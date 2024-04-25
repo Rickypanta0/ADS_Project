@@ -1,6 +1,7 @@
 # Classe per vari test
 
 import unittest
+
 from graphs_maker import generate_input
 from selecting import quick_select
 from selecting import median_of_medians_select
@@ -9,11 +10,12 @@ from selecting import median_of_medians_quasi_in_place
 from selecting import median_of_medians_in_place
 from selecting import heap_select
 
+
 class SelectTest(unittest.TestCase):
 
     def setUp(self):
-        self.n = 1000           # grandezza del vettore da generare
-        self.nmax = 100000      # numero massimo generabile
+        self.n = 1000  # grandezza del vettore da generare
+        self.nmax = 100000  # numero massimo generabile
         self.generated_input = generate_input(self.n, self.nmax)
         self.sorted_input = sorted(self.generated_input)
 
@@ -27,8 +29,9 @@ class SelectTest(unittest.TestCase):
         for k in range(self.n):
             with self.subTest(i=k):
                 copy = self.generated_input.copy()
-                self.assertEqual(median_of_medians_select(copy, k),
-                                 self.sorted_input[k])
+                self.assertEqual(
+                    median_of_medians_select(copy, k), self.sorted_input[k]
+                )
 
     def test_quick_select(self):
         for k in range(self.n):
