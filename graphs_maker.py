@@ -48,7 +48,7 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3,iter=0):
         #algorithm(A, k-1)  # Passa k-1 perché l'indice parte da 0
         #algorithm(A, len(A)-1)
         #algorithm(A, len(A) // 2)
-        algorithm(A,iter-1)
+        algorithm(A, iter)
         end_time = time.monotonic()
         if not gc.isenabled():
             gc.enable()  # riabilita il garbage collector
