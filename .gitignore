@@ -9,5 +9,6 @@ ADS_relazione.pdf
 *.pyc
 
 pyproject.toml
+.flake8
 
 .DS_Store
