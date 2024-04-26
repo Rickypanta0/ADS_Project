@@ -39,7 +39,7 @@ def partition(A, *, start=0, end=None, ppos=None):
 
 
 # Used in medianofmedians to sort the fixed-size lists
-def insertionsort(A, *, start=0, end=None):
+def insertionsort(A, *, start=0, end=None, compkey=lambda x: x):
     assert A is not None
     assert 0 <= start < len(A)
     assert end is None or start < end <= len(A)
@@ -61,7 +61,7 @@ def insertionsort(A, *, start=0, end=None):
     for j in range(start + 1, end):
         k = A[j]
         i = j - 1
-        while i >= start and k <= A[i]:
+        while i >= start and compkey(k) <= compkey(A[i]):
             A[i + 1] = A[i]
             i = i - 1
         A[i + 1] = k

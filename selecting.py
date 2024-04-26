@@ -51,6 +51,17 @@ def median_of_medians_non_in_place(A, *, start=0, end=None, blocksize=5):
             the median of medians.
     """
 
+    return median_of_medians_non_in_place_real(
+        [*enumerate(A)], start=start, end=end, blocksize=blocksize
+    )[0]
+
+
+def median_of_medians_non_in_place_real(A, *, start=0, end=None, blocksize=5):
+    assert A is not None
+    assert 0 <= start < len(A)
+    assert (end is None) or (start < end <= len(A))
+    assert blocksize > 0
+
     # Per ogni blocco di dimensione blocksize, trova la mediana ordinandolo e
     # aggiungi la mediana a una nuova lista (medians). Effettua la ricorsione
     # su quella lista finché non rimane solo un elemento, cioè la mediana delle
@@ -73,11 +84,11 @@ def median_of_medians_non_in_place(A, *, start=0, end=None, blocksize=5):
     for i in range(n_medians):
         block_start = start + i * blocksize
         block_end = min(block_start + blocksize, end)
-        insertionsort(A, start=block_start, end=block_end)
+        insertionsort(A, start=block_start, end=block_end, compkey=lambda x: x[1])
         median_position = (block_start + block_end) // 2
         medians.append(A[median_position])
 
-    return median_of_medians_non_in_place(medians, blocksize=blocksize)
+    return median_of_medians_non_in_place_real(medians, blocksize=blocksize)
 
 
 def median_of_medians_quasi_in_place(A, *, start=0, end=None, blocksize=5):
