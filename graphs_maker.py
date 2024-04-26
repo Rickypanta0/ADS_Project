@@ -77,7 +77,7 @@ def compute_points_MoM(*, nmin, nmax, iters):
             benchmark(median_of_medians_np, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
             benchmark(median_of_medians_p, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
         ))
-    dict["Fixed"]=points
+    dict["fixed"]=points
     return dict
 
 def plotMoM(points, type_k):
@@ -203,14 +203,17 @@ def plot(points, type_k):
 
 
 if __name__ == "__main__":
+    nmax=100000
+    nmin=1000
+    iters=100
     k_types = ["fixed k=n/2", "random","fixed-edge"]
     n_fixed = ["n=10000 whit varying k"]
     graphs=[]
-    graphs.append(compute_points_k_fixed(nmin=1000, nmax=10000, iters=100, k_types=k_types))
-    graphs.append(compute_points_n_fixed(nmin=1000, nmax=10000, iters=100,k_types=n_fixed))
+    graphs.append(compute_points_k_fixed(nmin=nmin, nmax=nmax, iters=iters, k_types=k_types))
+    graphs.append(compute_points_n_fixed(nmin=nmin, nmax=10000, iters=iters,k_types=n_fixed))
     print("")
-    point = compute_points_MoM(nmin=1000, nmax=10000, iters=100)
+    point = compute_points_MoM(nmin=nmin, nmax=nmax, iters=iters)
     for x in graphs:
         for i in x:
             plot(x[i],i)
-    plotMoM(point["Fixed"], "Fixed")
+    plotMoM(point["fixed"], "fixed")
