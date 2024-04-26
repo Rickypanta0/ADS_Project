@@ -45,7 +45,7 @@
         \vspace{1cm}
         \begin{figure}[h]
             \centering
-            \includegraphics[width=.5\textwidth]{uniud_logo.pdf}
+            \includegraphics[width=.5\textwidth]{photo/uniud_logo.png}
         \end{figure}
         \vspace{1.5cm}
         {\LARGE Università degli studi di Udine\par}
@@ -69,7 +69,7 @@ I tre algoritmi discussi all'interno della relazione per la risoluzione del prob
  \vspace{2mm}
  vettore.\\
 \textbf{Heap Select}\ Questo algoritmo di selezione utilizza due min$-$heap, denominate H1 e H2. La prima heap H1 é costruita a partire dal vettore fornito in input in tempo lineare e non viene modificata.
-La seconda heap \( H2 \) contiene inizialmente un solo nodo, corrispondente alla radice di \( H1 \). All'i-esima iterazione, per \( i \) che va da 1 a \( k-1 \), l'algoritmo estrae la radice di \( H2 \), che corrisponde a un nodo \( x_i \) in \( H1 \), e reinserisce in \( H2 \) i nodi successori (figli sinistro e destro) di \( x_i \) nella heap \( H1 \). Dopo \( k-1 \) iterazioni, la radice di \( H2 \) corrisponderà al \( k-esimo \) elemento più piccolo del vettore fornito in input.
+La seconda heap \( H2 \) contiene inizialmente un solo nodo, corrispondente alla radice di \( H1 \). La minheap H2 sarà MaxHeap oppure MinHeap a seconda dei k, questa decisione si tramuterà in un netto miglioramento delle prestazioni (sez. 4). All'i-esima iterazione, per \( i \) che va da 1 a \( k-1 \), l'algoritmo estrae la radice di \( H2 \), che corrisponde a un nodo \( x_i \) in \( H1 \), e reinserisce in \( H2 \) i nodi successori (figli sinistro e destro) di \( x_i \) nella heap \( H1 \). Dopo \( k-1 \) iterazioni, la radice di \( H2 \) corrisponderà al \( k-esimo \) elemento più piccolo del vettore fornito in input.
 L'algoritmo descritto ha complessità temporale $O(n+klogk)$\\
 \vspace{2mm}
 sia nel caso pessimo che in quello medio.\\\textbf{Medians of Medians}\ L'algoritmo descritto è un algoritmo basato sulla suddivisione di un vettore in blocchi di dimensione limitata (5 elementi), il calcolo della mediana di ciascun blocco e il calcolo della mediana delle mediane dei blocchi stessi. Questa mediana viene utilizzata per partizionare l'array attorno ad essa, similmente alla procedura "partition" dell'algoritmo "quick sort". A seconda del valore \( k \) fornito in input, l'algoritmo esegue chiamate ricorsive sulla parte sinistra o destra dell'array rispetto alla mediana calcolata. 
@@ -80,7 +80,7 @@ Sono proposti tre diversi approcci:
     \item Quasi in place: Riutilizza lo spazio allocato per il vettore originariamente fornito in input.
     \item In place: Privo di chiamate ricorsive e riutilizza lo spazio del vettore originario.
 \end{enumerate}
-In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \( O(n) \).
+In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \( O(n) \). Nei grafici della sezione 4 verrà utilizzata la versione quasi in Place.\\
 \\
 \subsection{Algoritmo per la generazione dei vettori}
 La lunghezza n dell'array è compresa tra [100,100000].
@@ -107,8 +107,8 @@ $Medians\ Of\ Medians$ e $Quick\ Select$ hanno entrambi complessita $O(n)$ però
             \includegraphics[width=.83\textwidth]{graphs/K_last_n.png}
             \includegraphics[width=.83\textwidth]{graphs/K_last_2xlog.png}
 \end{figure}
-Come si evince dal grafico nel caso in cui $k$ risulti posizionarisi a uno dei due estremi del vettore implica un netto miglioramento delle perfomance da parte di $Heap\ Select$.\\
-Questo è dovuto dal fatto come spiegato nella sezione 2.1 che a seconda della posizione di k se $k\in[0,\frac{n}{2}]$ viene adottata una MinHeap mentre se $k\in[\frac{n}{2}+1,n-1]$ viene utilizzata un MaxHeap, adottando un andamento lineare.\\
+Come si evince dal grafico nel caso in cui $k$ risulti posizionarisi a uno dei due estremi del vettore porta a un netto miglioramento delle perfomance da parte di $Heap\ Select$.\\
+Questo è dovuto dal fatto come spiegato nella sezione 2.1 che a seconda della posizione di k se $k\in[0,\frac{n}{2}]$ viene adottata una MinHeap mentre se $k\in[\frac{n}{2}+1,n-1]$ viene utilizzata un MaxHeap, adottando un andamento lineare nel caso in cui k tenda agli estremi del vettore.\\
 Mentre gli andamenti di $MoM$ e $Quick\ Select$ rimangono invarianti.\\
 \newpage
 \subsection{Caso k random}
@@ -125,8 +125,14 @@ Dai grafici soprastanti e da quelli precedente mostrati si rende ancora più evi
     \includegraphics[width=.83\textwidth]{graphs/n_fisso/np.png}
     \includegraphics[width=.83\textwidth]{graphs/n_fisso/np2.png}
 \end{figure}
-Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, raggiungendo il massimo globale quando $k=\frac{n}{2}$ andandosi ad allineare con $MoM$ all avvicinarsi agli estremi del vettore. Riguardo ad $Quick\ Select$ e $MoM$ non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.\\
+Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, difatto l'algoritmo mostra un comportamento monotono crescente per $k\in[0,\frac{n}{2}]$ raggiungendo un massimo a $k=\frac{n}{2}$. 
+Successivamente l'algoritmo mostra un andamento monotono decrescente per $k\in[\frac{n}{2}+1,n-1]$, andandosi ad allineare con $MoM$ all avvicinarsi agli estremi del vettore. Riguardo ad $Quick\ Select$ e $MoM$ non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.\\
 \newpage
 \section{Confronto tra MoM}
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.83\textwidth]{graphs/MoMs.png}
+    \includegraphics[width=.83\textwidth]{graphs/MoMs_log.png}
+\end{figure}
+Come si può notare i tre algoritmi hanno degli andamenti molto simili sopratutto le due versioni place e quasi in place. Invece la versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
 \end{document}
