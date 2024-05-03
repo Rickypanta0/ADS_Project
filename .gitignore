@@ -12,3 +12,7 @@ pyproject.toml
 .flake8
 
 .DS_Store
+
+__pycache__/
+__pycache__/selecting.cpython-310.pyc
+__pycache__/sorting.cpython-310.pyc

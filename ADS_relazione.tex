@@ -96,16 +96,16 @@ Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array ge
 \subsection{Caso k costante}
 \begin{figure}[h]
             \centering
-            \includegraphics[width=.83\textwidth]{graphs/K_const_n.png}
-            \includegraphics[width=.83\textwidth]{graphs/K_const_2xlog.png}
+            \includegraphics[width=.83\textwidth]{graphs/k_const_n.png}
+            \includegraphics[width=.83\textwidth]{graphs/k_const_2xlog.png}
 \end{figure}
 Come si può notare dai grafici, con $k=\frac{n}{2}$ l'algoritmo $HeapSelect$ risulta essere quello con prestazioni peggiori tra i tre assumendo un andamento dell'oridine di $klogk$.
 $Medians\ Of\ Medians$ e $Quick\ Select$ hanno entrambi complessita $O(n)$ però $MoM$ ha un andamento peggiore a causa degli ulteriori calcoli per determinare la mediana delle mediane.\\
 \newpage
 \begin{figure}[h]
             \centering
-            \includegraphics[width=.83\textwidth]{graphs/K_last_n.png}
-            \includegraphics[width=.83\textwidth]{graphs/K_last_2xlog.png}
+            \includegraphics[width=.83\textwidth]{graphs/k_last_n.png}
+            \includegraphics[width=.83\textwidth]{graphs/k_last_2xlog.png}
 \end{figure}
 Come si evince dal grafico nel caso in cui $k$ risulti posizionarisi a uno dei due estremi del vettore porta a un netto miglioramento delle perfomance da parte di $Heap\ Select$.\\
 Questo è dovuto dal fatto come spiegato nella sezione 2.1 che a seconda della posizione di k se $k\in[0,\frac{n}{2}]$ viene adottata una MinHeap mentre se $k\in[\frac{n}{2}+1,n-1]$ viene utilizzata un MaxHeap, adottando un andamento lineare nel caso in cui k tenda agli estremi del vettore.\\
@@ -114,16 +114,16 @@ Mentre gli andamenti di $MoM$ e $Quick\ Select$ rimangono invarianti.\\
 \subsection{Caso k random}
 \begin{figure}[h]
             \centering
-            \includegraphics[width=.83\textwidth]{graphs/K_random_n.png}
-            \includegraphics[width=.83\textwidth]{graphs/K_random_2xlog.png}
+            \includegraphics[width=.83\textwidth]{graphs/k_random_n.png}
+            \includegraphics[width=.83\textwidth]{graphs/k_random_2xlog.png}
 \end{figure}
 Dai grafici soprastanti e da quelli precedente mostrati si rende ancora più evidente la quasi indipendenza di $MoM$ e $Quick\ Select$ dalla posizione di k. Al contrario invece si evidenzia la netta dipendenza della complessità di $Heap\ Select$ dovuta dalla posizione di k e in questo caso la sua imprevedibilità.\\
 \newpage
 \subsection{Caso n fissato e k variato}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.83\textwidth]{graphs/n_fisso/np.png}
-    \includegraphics[width=.83\textwidth]{graphs/n_fisso/np2.png}
+    \includegraphics[width=.83\textwidth]{graphs/n_fixex_n.png}
+    \includegraphics[width=.83\textwidth]{graphs/n_fixed_2xlog.png}
 \end{figure}
 Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, difatto l'algoritmo mostra un comportamento monotono crescente per $k\in[0,\frac{n}{2}]$ raggiungendo un massimo a $k=\frac{n}{2}$. 
 Successivamente l'algoritmo mostra un andamento monotono decrescente per $k\in[\frac{n}{2}+1,n-1]$, andandosi ad allineare con $MoM$ all avvicinarsi agli estremi del vettore. Riguardo ad $Quick\ Select$ e $MoM$ non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.\\
@@ -131,8 +131,8 @@ Successivamente l'algoritmo mostra un andamento monotono decrescente per $k\in[\
 \section{Confronto tra MoM}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.83\textwidth]{graphs/MoMs.png}
-    \includegraphics[width=.83\textwidth]{graphs/MoMs_log.png}
+    \includegraphics[width=.83\textwidth]{graphs/MoMs_n.png}
+    \includegraphics[width=.83\textwidth]{graphs/MoMs_2xlog.png}
 \end{figure}
 Come si può notare i tre algoritmi hanno degli andamenti molto simili sopratutto le due versioni place e quasi in place. Invece la versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
 \end{document}
