@@ -26,6 +26,13 @@ def generate_input(n, max_value):
     'max_value'."""
     return [random.randint(0, max_value) for _ in range(n)]
 
+def generate_input_worst_case_quick_sort(n, max_value, reverse=False):
+    """
+    Genera un vettore di lunghezza n con valori interi pseudocasuali da 0 a max_value
+    in ordine crescente.
+    """
+    return sorted([random.randint(0, max_value) for _ in range(n)], reverse=reverse)
+
 
 def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3, iter=0, k_values=None):
     """
