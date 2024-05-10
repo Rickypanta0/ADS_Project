@@ -18,10 +18,10 @@
     numberstyle=\small\ttfamily
 }
 
-\usepackage{blindtext}
+% \usepackage{blindtext}
 \usepackage{titlesec}
-\usepackage{geometry}
-\usepackage{relsize}
+% \usepackage{geometry}
+% \usepackage{relsize}
 \usepackage{tikz}
 % \geometry{
 % a4paper,
@@ -31,8 +31,18 @@
 % top=50mm,
 % }
 
+\usepackage{hyperref}
 
-\sloppy % ?
+% \sloppy % ?
+
+% comandi per riferirsi agli algoritmi
+\newcommand{\QuickSelect}{\textsc{QuickSelect}}
+\newcommand{\HeapSelect}{\textsc{HeapSelect}}
+\newcommand{\MoMSelect}{\textsc{MoMSelect}}
+
+% comandi per la notazione asintotica
+\newcommand{\Tquad}{\ifmmode \Theta(n^2) \else $\Theta(n^2)$ \fi} % Θ(n^2)
+\newcommand{\Tlin}{\ifmmode \Theta(n) \else $\Theta(n)$ \fi} % Θ(n)
 
 \begin{document}
 
@@ -45,7 +55,7 @@
         \vspace{1cm}
         \begin{figure}[h]
             \centering
-            \includegraphics[width=.5\textwidth]{photo/uniud_logo.png}
+            \includegraphics[width=.5\textwidth]{photo/uniud_logo.pdf}
         \end{figure}
         \vspace{1.5cm}
         {\LARGE Università degli studi di Udine\par}
@@ -56,23 +66,41 @@
         {\Large\itshape Gerardi Ludovico, Sclauzero Lorenzo, Pantanali Riccardo\par}
     \end{center}
 \end{titlepage}
-\newpage
+
+
+
 \section{Introduzione}
-Il progetto ha come scopo l'implementazione ed analizzare la complessità di tre algoritmi di selezione. Che calcolano il k-esimo elemento più piccolo di un vettore non ordinato di interi.\\
-L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi\\
-I tre algoritmi discussi all'interno della relazione per la risoluzione del problema prendono il nome di $Quick\ Select$, $Heap\ Select$ e $Medians\ of\ Medians$: come si vedrà nei prossimi paragrafi, le diverse procedure adottano dei metodi molto diversi questa differenza di approcci vengono riflesse nei grafici.\\
-\section{Presentazione degli Algoritmi}
-\subsection{Algoritmi calcolo k-esimo elemento}
-\textbf{Quick Select}\ La procedura in ogni chiamata ricorsiva su un intervallo $[i,j]$
- del vettore fornito in input termina restituendo il $k-esimo$ elemento più piccolo del vettore qualora $k-1\in[i,j]$, oppure un valore indefinito qualora k$\not\in[i,j]$. L'algoritmo ha una complessità asintotica di $\Theta(n^2)$
- nel caso pessimo e $O(n)$ nel caso medio, dove $n$ è il numero di elementi del 
- \vspace{2mm}
- vettore.\\
-\textbf{Heap Select}\ Questo algoritmo di selezione utilizza due min$-$heap, denominate H1 e H2. La prima heap H1 é costruita a partire dal vettore fornito in input in tempo lineare e non viene modificata.
-La seconda heap \( H2 \) contiene inizialmente un solo nodo, corrispondente alla radice di \( H1 \). La minheap H2 sarà MaxHeap oppure MinHeap a seconda dei k, questa decisione si tramuterà in un netto miglioramento delle prestazioni (sez. 4). All'i-esima iterazione, per \( i \) che va da 1 a \( k-1 \), l'algoritmo estrae la radice di \( H2 \), che corrisponde a un nodo \( x_i \) in \( H1 \), e reinserisce in \( H2 \) i nodi successori (figli sinistro e destro) di \( x_i \) nella heap \( H1 \). Dopo \( k-1 \) iterazioni, la radice di \( H2 \) corrisponderà al \( k-esimo \) elemento più piccolo del vettore fornito in input.
-L'algoritmo descritto ha complessità temporale $O(n+klogk)$\\
-\vspace{2mm}
-sia nel caso pessimo che in quello medio.\\\textbf{Medians of Medians}\ L'algoritmo descritto è un algoritmo basato sulla suddivisione di un vettore in blocchi di dimensione limitata (5 elementi), il calcolo della mediana di ciascun blocco e il calcolo della mediana delle mediane dei blocchi stessi. Questa mediana viene utilizzata per partizionare l'array attorno ad essa, similmente alla procedura "partition" dell'algoritmo "quick sort". A seconda del valore \( k \) fornito in input, l'algoritmo esegue chiamate ricorsive sulla parte sinistra o destra dell'array rispetto alla mediana calcolata. 
+Il progetto ha come scopo l'implementazione di tre algoritmi di selezione e l'analisi della loro complessità. 
+Dato un vettore di interi $v$ di dimensione $n$ e un intero $k$ con $1 < k \le n$, gli algoritmi di selezione calcolano il $k$-esimo elemento più piccolo di $v$.
+
+I tre algoritmi discussi sono \QuickSelect{}, \HeapSelect{} e \MoMSelect{} (che sta per median-of-medians select); vengono presentati nella sezione \ref{sec:presentazione-algoritmi} insieme all'algoritmo utilizzato per la generazione dell'input.
+Nella sezione \ref{sec:misurazione} si discute brevemente la misurazione dei tempi di esecuzione, necessaria per l'analisi della complessità.
+Nella sezione \ref{sec:grafici} vengono presentati e discussi i risultati delle misurazioni sotto forma di grafici.
+Infine nella sezione \ref{sec:confronto-mom} viene proposto un confronto tra alcune varianti di \MoMSelect{}.
+
+
+
+\section{Presentazione degli algoritmi}
+\label{sec:presentazione-algoritmi}
+
+\subsection{Algoritmi di selezione}
+\paragraph{\QuickSelect}
+Questo algoritmo partiziona ricorsivamente $v$ rispetto a un elemento scelto come pivot e confronta la posizione finale del pivot con $k$: sono sono uguali allora l'algoritmo termina, ritornando $v[k]$; altrimenti effettua una chiamata ricorsiva sulla partizione sinistra o destra di $v$, a seconda che $k$ sia rispettivamente minore o maggiore della posizione finale del pivot.
+Quest'ultimo viene scelto sempre come l'ultimo elemento del sottovettore considerato.
+Tale approccio porta la complessità nel caso peggiore a essere \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio è \Tlin.
+D'altra parte l'overhead dovuto alla scelta del pivot è molto basso, il che, come si vedrà, porta ad un vantaggio rispetto a \MoMSelect{} nel caso di vettore generati pseudocasualmente.
+
+\paragraph{\HeapSelect}
+\HeapSelect{} utilizza due heap $H_1$ e $H_2$.
+$H_1$ è una min-heap che viene costruita a partire da $v$ in tempo lineare e non viene successivamente modificata.
+$H_2$ è una min-heap che inizialmente contiene solo il nodo radice di $H_1$.
+Ad ogni iterazione viene estratta la radice $r$ da $H_2$ e vengono aggiunti i figli di $r$ in $H_1$ all'interno di $H_2$.
+Dopo $k-1$ iterazioni $r$ è l'elemento cercato, cioè il $k$-esimo più piccolo all'interno di $v$.
+Siccome cercare il $k$-esimo elemento più piccolo equivale a cercare l'elemento $(n-k+1)$-esimo più grande, se $k>n/2$ è si utilizza una max-heap per $H_2$, il che consente di ridurre il numero di iterazioni necessarie.
+Questo algoritmo ha una complessità temporale pari a $O(n+k\log k)$ sia nel caso pessimo che in quello medio.
+
+\paragraph{\MoMSelect}
+L'algoritmo descritto è un algoritmo basato sulla suddivisione di un vettore in blocchi di dimensione limitata (5 elementi), il calcolo della mediana di ciascun blocco e il calcolo della mediana delle mediane dei blocchi stessi. Questa mediana viene utilizzata per partizionare l'array attorno ad essa, similmente alla procedura "partition" dell'algoritmo "quick sort". A seconda del valore \( k \) fornito in input, l'algoritmo esegue chiamate ricorsive sulla parte sinistra o destra dell'array rispetto alla mediana calcolata. 
 
 Sono proposti tre diversi approcci:
 \begin{enumerate}
@@ -87,12 +115,18 @@ La lunghezza n dell'array è compresa tra [100,100000].
 A tale scopo, è possibile utilizzare un ciclo for con un indice $i$=0,...,99, e attraverso una funzione esponenziale di $i$ per generare le lunghezze n
 , $n_i=\lfloor A*B^i\rfloor$ , dove A e B sono costanti in virgola mobile.\\
 Nel nostro caso \[n_i=\lfloor A*B^i\rfloor, A=100, B=10000^{\frac{1}{100-1}},i=0,...,99\]
+
 \section{Misurazione dei tempi di esecuzione}
+\label{sec:misurazione}
 La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero un numero di volte tale da garantire un errore massimo relativo pari a \( f_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{f} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
 
 Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array generato pseudo-casualmente di lunghezza \( n \), differente ad ogni iterazione.
-\newpage
+L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi\\
+
+
 \section{Rappresentazione grafica dei risultati}
+\label{sec:grafici}
+
 \subsection{Caso k costante}
 \begin{figure}[h]
             \centering
@@ -128,7 +162,9 @@ Dai grafici soprastanti e da quelli precedente mostrati si rende ancora più evi
 Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, difatto l'algoritmo mostra un comportamento monotono crescente per $k\in[0,\frac{n}{2}]$ raggiungendo un massimo a $k=\frac{n}{2}$. 
 Successivamente l'algoritmo mostra un andamento monotono decrescente per $k\in[\frac{n}{2}+1,n-1]$, andandosi ad allineare con $MoM$ all avvicinarsi agli estremi del vettore. Riguardo ad $Quick\ Select$ e $MoM$ non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.\\
 \newpage
+
 \section{Confronto tra MoM}
+\label{sec:confronto-mom}
 \begin{figure}[h]
     \centering
     \includegraphics[width=.83\textwidth]{graphs/MoMs_n.png}
