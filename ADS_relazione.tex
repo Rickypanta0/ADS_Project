@@ -41,8 +41,9 @@
 \newcommand{\MoMSelect}{\textsc{MoMSelect}}
 
 % comandi per la notazione asintotica
-\newcommand{\Tquad}{\ifmmode \Theta(n^2) \else $\Theta(n^2)$ \fi} % Θ(n^2)
-\newcommand{\Tlin}{\ifmmode \Theta(n) \else $\Theta(n)$ \fi} % Θ(n)
+\newcommand{\Tquad}{\ifmmode \Theta(n^2) \else $\Theta(n^2)$\fi} % Θ(n^2)
+\newcommand{\Tlin}{\ifmmode \Theta(n) \else $\Theta(n)$\fi} % Θ(n)
+\newcommand{\Olin}{\ifmmode O(n) \else $O(n)$\fi} % O(n)
 
 \begin{document}
 
@@ -100,21 +101,29 @@ Siccome cercare il $k$-esimo elemento più piccolo equivale a cercare l'elemento
 Questo algoritmo ha una complessità temporale pari a $O(n+k\log k)$ sia nel caso pessimo che in quello medio.
 
 \paragraph{\MoMSelect}
-L'algoritmo descritto è un algoritmo basato sulla suddivisione di un vettore in blocchi di dimensione limitata (5 elementi), il calcolo della mediana di ciascun blocco e il calcolo della mediana delle mediane dei blocchi stessi. Questa mediana viene utilizzata per partizionare l'array attorno ad essa, similmente alla procedura "partition" dell'algoritmo "quick sort". A seconda del valore \( k \) fornito in input, l'algoritmo esegue chiamate ricorsive sulla parte sinistra o destra dell'array rispetto alla mediana calcolata. 
-
-Sono proposti tre diversi approcci:
+Il funzionamento ad alto livello di \MoMSelect è come quello di \QuickSelect: effettuare una chiamata ricorsiva sulla porzione di vettore che contiene l'elemento cercato.
+La differenza tra i due algoritmo sta nella scelta del pivot.
+Infatti \MoMSelect{} utilizza una procedura ausiliaria che calcola la posizione della mediana delle mediana all'interno del sottovettore considerato.
+Nello specifico tale procedura divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina ciasun blocco e ne calcola la mediana, e quindi effettua una chiamata ricorsiva sulle mediane appena calcolate finché non rimane un solo elemento: la mediana delle mediane.
+Sono proposte tre varianti:
 \begin{enumerate}
-    \item Ricorsivo: Che alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi.
-    \item Quasi in place: Riutilizza lo spazio allocato per il vettore originariamente fornito in input.
-    \item In place: Privo di chiamate ricorsive e riutilizza lo spazio del vettore originario.
+    \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
+    \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
+    \item in-place: riutilizza lo spazio del vettore originario, come nella variante precedente, ma senza effettuare chiamate ricorsive.
 \end{enumerate}
-In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \( O(n) \). Nei grafici della sezione 4 verrà utilizzata la versione quasi in Place.\\
-\\
+
+In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Olin. 
+Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in Place.
+
 \subsection{Algoritmo per la generazione dei vettori}
-La lunghezza n dell'array è compresa tra [100,100000].
-A tale scopo, è possibile utilizzare un ciclo for con un indice $i$=0,...,99, e attraverso una funzione esponenziale di $i$ per generare le lunghezze n
-, $n_i=\lfloor A*B^i\rfloor$ , dove A e B sono costanti in virgola mobile.\\
-Nel nostro caso \[n_i=\lfloor A*B^i\rfloor, A=100, B=10000^{\frac{1}{100-1}},i=0,...,99\]
+La lunghezza $n$ del vettori generati varia da $1000$ ($n_{\min}$) a $100000$ ($n_{\max}$), mentre i valori degli interi variano $0$ a $100000$.
+In certe misurazioni la lunghezza dei vettori cresce secondo la serie geometrica
+\[
+    L(i) = n_{\min} \cdot \left(\frac{n_{\max}}{n_{\min}}\right)^{i/99}
+\]
+dove $i$ è il numero dell'iterazione corrente, che varia da $0$ a $99$, per un totale di $100$ iterazioni.
+Si noti in particolare che $L(0) = n_{\min}$ e $L(99) = n_{\max}$.
+
 
 \section{Misurazione dei tempi di esecuzione}
 \label{sec:misurazione}
