@@ -122,7 +122,7 @@ Dai grafici soprastanti e da quelli precedente mostrati si rende ancora più evi
 \subsection{Caso n fissato e k variato}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.83\textwidth]{graphs/n_fixex_n.png}
+    \includegraphics[width=.83\textwidth]{graphs/n_fixed_n.png}
     \includegraphics[width=.83\textwidth]{graphs/n_fixed_2xlog.png}
 \end{figure}
 Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, difatto l'algoritmo mostra un comportamento monotono crescente per $k\in[0,\frac{n}{2}]$ raggiungendo un massimo a $k=\frac{n}{2}$. 
@@ -134,5 +134,5 @@ Successivamente l'algoritmo mostra un andamento monotono decrescente per $k\in[\
     \includegraphics[width=.83\textwidth]{graphs/MoMs_n.png}
     \includegraphics[width=.83\textwidth]{graphs/MoMs_2xlog.png}
 \end{figure}
-Come si può notare i tre algoritmi hanno degli andamenti molto simili sopratutto le due versioni place e quasi in place. Invece la versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
+Come si può notare i due algoritmi hanno degli andamenti molto simili. La versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
 \end{document}

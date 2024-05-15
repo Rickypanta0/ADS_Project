@@ -75,7 +75,6 @@ def compute_points_MoM(*, nmin, nmax, iters):
             n,
             benchmark(median_of_medians_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
             benchmark(median_of_medians_np, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
-            benchmark(median_of_medians_p, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
         ))
     dict["fixed"]=points
     return dict
@@ -85,17 +84,15 @@ def plotMoM(points, type_k):
         n,
         times_median_of_medians_select,
         times_median_of_medians_np,
-        times_median_of_medians_n,
     ) = zip(*points)
 
     # Grafico
     plt.figure(figsize=(15, 8))
     plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Quasi in Place",)
     plt.plot(n, times_median_of_medians_np, "-o", label="Median of Medians Non Place")
-    plt.plot(n, times_median_of_medians_n, "-o", label="Median of Medians Place")
-    plt.xlabel("Array (n)")
-    plt.ylabel("Time (seconds)")
-    plt.title(f"Benchmarking with {type_k} index")
+    plt.xlabel("Array (n)",fontsize=18)
+    plt.ylabel("Time (seconds)",fontsize=18)
+    plt.title(f"Benchmarking with {type_k} index",fontsize=22)
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -103,12 +100,11 @@ def plotMoM(points, type_k):
     plt.figure(figsize=(15, 8))
     plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Quasi in Place",)
     plt.plot(n, times_median_of_medians_np, "-o", label="Median of Medians Non Place")
-    plt.plot(n, times_median_of_medians_n, "-o", label="Median of Medians Place")
     plt.xscale("log")
     plt.yscale("log")
-    plt.xlabel("Array (n) (scala logaritmica)")
-    plt.ylabel("Time (seconds) (scala logaritmica)")
-    plt.title(f"Benchmarking with {type_k} index")
+    plt.xlabel("Array (n) (scala logaritmica)",fontsize=18)
+    plt.ylabel("Time (seconds) (scala logaritmica)",fontsize=18)
+    plt.title(f"Benchmarking with {type_k} index",fontsize=22)
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -170,15 +166,15 @@ def plot(points, type_k):
         times_heap_select,
         times_quick_select,
     ) = zip(*points)
-
+    info_x = "Index K" if type_k=="n=10000 whit varying k" else "Array (n)"
     # Grafico
     plt.figure(figsize=(15, 8))
     plt.plot(n,times_median_of_medians_select,"-o",label="Median of Medians Select",)
     plt.plot(n, times_heap_select, "-o", label="Heap Select")
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
-    plt.xlabel("Array (n)")
-    plt.ylabel("Time (seconds)")
-    plt.title(f"Benchmarking with {type_k} index")
+    plt.xlabel(f"{info_x}", fontsize=18)
+    plt.ylabel("Time (seconds)", fontsize=18)
+    plt.title(f"Benchmarking with {type_k} index", fontsize=22)
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -194,9 +190,9 @@ def plot(points, type_k):
     plt.plot(n, times_quick_select, "-o", label="Quick Select")
     plt.xscale("log")
     plt.yscale("log")
-    plt.xlabel("Array (n) (scala logaritmica)")
-    plt.ylabel("Time (seconds) (scala logaritmica)")
-    plt.title(f"Benchmarking with {type_k} index")
+    plt.xlabel(f"{info_x} (scala logaritmica)", fontsize=18)
+    plt.ylabel("Time (seconds) (scala logaritmica)", fontsize=18)
+    plt.title(f"Benchmarking with {type_k} index",fontsize=22)
     plt.legend()
     plt.grid(True)
     plt.show()
