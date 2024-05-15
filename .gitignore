@@ -1,6 +1,9 @@
 # file ausiliari prodotti da LaTeX
 *.log
 *.aux
+*.out
+*.fls
+*.fdb_latexmk
 
 # file pdf della relazione
 ADS_relazione.pdf
@@ -10,6 +13,7 @@ ADS_relazione.pdf
 
 pyproject.toml
 .flake8
+.latexmkrc
 
 .DS_Store
 
