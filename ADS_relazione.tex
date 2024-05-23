@@ -9,6 +9,7 @@
 % matematica
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{unicode-math}
 
 % codice
 \usepackage{listings}
@@ -56,7 +57,7 @@
         \vspace{1cm}
         \begin{figure}[h]
             \centering
-            \includegraphics[width=.5\textwidth]{photo/uniud_logo.png}
+            \includegraphics[width=.5\textwidth]{photo/uniud_logo.pdf}
         \end{figure}
         \vspace{1.5cm}
         {\LARGE Università degli studi di Udine\par}
@@ -71,7 +72,7 @@
 
 
 \section{Introduzione}
-Il progetto ha come scopo l'implementazione di tre algoritmi di selezione e l'analisi della loro complessità. 
+Il progetto ha come scopo l'implementazione di tre algoritmi di selezione e l'analisi della loro complessità.
 Dato un vettore di interi $v$ di dimensione $n$ e un intero $k$ con $1 < k \le n$, gli algoritmi di selezione calcolano il $k$-esimo elemento più piccolo di $v$.
 
 I tre algoritmi discussi sono \QuickSelect{}, \HeapSelect{} e \MoMSelect{} (che sta per median-of-medians select); vengono presentati nella sezione \ref{sec:presentazione-algoritmi} insieme all'algoritmo utilizzato per la generazione dell'input.
@@ -111,8 +112,8 @@ Sono proposte due varianti:
     \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
 \end{enumerate}
 
-In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Olin. 
-Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in Place.
+In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Olin.
+Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in-place.
 
 \subsection{Algoritmo per la generazione dei vettori}
 La lunghezza $n$ del vettori generati varia da $1000$ ($n_{\min}$) a $100000$ ($n_{\max}$), mentre i valori degli interi variano $0$ a $100000$.
@@ -132,34 +133,45 @@ Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array ge
 L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi\\
 
 \newpage
+
 \section{Rappresentazione grafica dei risultati}
 \label{sec:grafici}
 
-\subsection{Caso k costante}
+\subsection{Caso \texorpdfstring{$\symbf{k=n/2}$}{k}}
 \begin{figure}[h]
             \centering
             \includegraphics[width=.83\textwidth]{graphs/k_const_n.png}
             \includegraphics[width=.83\textwidth]{graphs/k_const_2xlog.png}
 \end{figure}
-Come evidenziato dai grafici, l'algoritmo $HeapSelect$ mostra prestazioni inferiori quando $k=\frac{n}{2}$. Infatti, come illustrato nel capitolo 2.1, ha una complessità di $O(k \log k + n)$. Tuttavia, questa situazione richiede un'ulteriore analisi, come dimostrato successivamente.\\
-\begin{align*}
-O(n + k \log k) & = O\left(n + \frac{n}{2} \log \frac{n}{2}\right) \\
-& = O\left(n + \frac{n}{2} \cdot (\log n - \log 2)\right) \\
-& = O(n + \frac{n}{2} \cdot \log n - \frac{n}{2}) \\
-& = O(n + n \log n - \frac{n}{2}) \\
-& = O(n \log n).
-\end{align*}\\
-$Medians\ Of\ Medians$ e $Quick\ Select$ entrambi hanno una complessità $O(n)$. Tuttavia, $MoM$ mostra un andamento peggiore a causa dei calcoli aggiuntivi necessari per determinare la mediana delle mediane.
+Come evidenziato dai grafici, nel caso in cui $k=n/2$ l'algoritmo \HeapSelect{} è più inefficiente rispetto a \QuickSelect{} e \MoMSelect{}.
+Per spiegare questo comportamento occorre tenere conto della complessità di \HeapSelect{}; infatti sostituendo $k$ con $n/2$ nella formula della complessità di ottiene:
+\[\begin{split}
+	O(n + k\log k) 	& = O\left(n + \frac{n}{2}\log \frac{n}{2}\right) \\
+			& = O\left(n + \frac{n}{2}(\log n - \log 2)\right) \\
+			& = O\left(n + \frac{n}{2}\log n - \frac{n}{2}\log 2\right) \\
+			& = O(n \log n)
+\end{split}\]
+cioè la crescita di \HeapSelect{} risulta superlineare.
+È facile vedere che lo stesso risultato si ottiene ogni volta che $k$ è una frazione di $n$.
+
+Invece \MoMSelect{} e \QuickSelect{} hanno entrambi complessità $O(n)$.
+Tuttavia \QuickSelect{} risulta più veloce rispetto a \MoMSelect{} e ciò è dovuto all'overhead richiesto da quest'ultimo algoritmo per calcolare la mediana delle mediane.
+
 \newpage
+\subsection{Caso k estremo}
 \begin{figure}[h]
             \centering
             \includegraphics[width=.83\textwidth]{graphs/k_last_n.png}
             \includegraphics[width=.83\textwidth]{graphs/k_last_2xlog.png}
 \end{figure}
-Come si evince dal grafico nel caso in cui $k$ risulti posizionarisi a uno dei due estremi del vettore porta a un netto miglioramento delle perfomance da parte di $Heap\ Select$.\\
-Questo è dovuto dal fatto come spiegato nella sezione 2.1 che a seconda della posizione di k se $k\in[0,\frac{n}{2}]$ viene adottata una MinHeap mentre se $k\in[\frac{n}{2}+1,n-1]$ viene utilizzata un MaxHeap, adottando un andamento lineare nel caso in cui k tenda agli estremi del vettore.\\
-In entrambi i casi in cui $k=0$ o $k=n-1$ adottando due Heap differenti la parte $k\log k$ dell'espressione $O(n+k\log k)$ diventa trascurabile, diventando $O(n)$\\
-Mentre gli andamenti di $MoM$ e $Quick\ Select$ rimangono invarianti.\\
+Nel caso in cui $k$ sia un estemo del vettore, cioè $k=1$ o $k=n$, si nota un netto miglioramento da parte di \HeapSelect{}, tanto da diventare migliore di \MoMSelect{}.
+Infatti essendo $k$ costante l'apporto dato dal fattore $k\log k$ diventa trascurabile e quindi il costo di \HeapSelect{} diventa $O(n)$; tale costo è per la maggior parte dovuto alla costruzione dell'heap.
+Possiamo quindi affermare che questa operazione risulta più veloce, seppure di poco, rispetto al calcolo della mediana della mediane.
+Notiamo che siccome per $k > n/2$ si utilizza una max heap, il costo nel caso in cui $k=n$ è pari a quello in cui $k=1$.
+
+Per quanto riguarda \QuickSelect{} e \MoMSelect{}, il loro andamento risulta praticamente invariato rispetto al caso precedente.
+
+
 \newpage
 \subsection{Caso k random}
 \begin{figure}[h]
@@ -167,9 +179,17 @@ Mentre gli andamenti di $MoM$ e $Quick\ Select$ rimangono invarianti.\\
             \includegraphics[width=.83\textwidth]{graphs/k_random_n.png}
             \includegraphics[width=.83\textwidth]{graphs/k_random_2xlog.png}
 \end{figure}
-Dai grafici sopra esposti e quelli precedentemente mostrati emerge chiaramente la quasi indipendenza di $MoM$ e $Quick\ Select$ dalla posizione di $k$. Questi algoritmi mantengono una prestazione stabile e prevedibile indipendentemente dalla posizione dell'elemento $k$ nel vettore.
 
-Al contrario, la complessità di $Heap\ Select$ mostra una netta dipendenza dalla posizione di $k$, e in questo contesto risulta essere imprevedibile. Questo è evidenziato dalla variazione significativa delle prestazioni di $Heap\ Select$ in base alla posizione di $k$, conferendo un carattere meno deterministico alla sua esecuzione.
+Nel caso in cui $k$ sia casuale emerge chiaramente l'indipendenza dell'algoritmo \MoMSelect{} da $k$: il suo andamento risulta infatti molto stabile al variare di $k$, e ciò è da attribuirsi al calcolo della mediana delle mediane, che assicura un andamento lineare.
+
+Invece \HeapSelect{} mostra un andamento più instabile.
+Ciò è dovuto al fatto che $k$ determina la sue complessità complessità, che varia da $O(n)$ a $O(n\log n)$, come si è già visto.
+
+Anche \QuickSelect{} si mostra più instabile di \MoMSelect{}.
+Ricordiamo infatti che nel caso peggiore la complessità di \QuickSelect{} è $\Theta(n^2)$.
+
+
+
 \newpage
 \subsection{Caso n fissato e k variato}
 \begin{figure}[h]
@@ -177,9 +197,21 @@ Al contrario, la complessità di $Heap\ Select$ mostra una netta dipendenza dall
     \includegraphics[width=.83\textwidth]{graphs/n_fixed_n.png}
     \includegraphics[width=.83\textwidth]{graphs/n_fixed_2xlog.png}
 \end{figure}
-Da questi particolari grafici con k varia seguendo una serie geometrica, che permette di distribuire i suoi valori in maniera esponenziale, mentre la lunghezza del vettore è fissa a n=10000. Si noti in maniera ancora più marcata della totale dipendenza dell'andamento di $Heap\ Select$ al valore k, difatto l'algoritmo mostra un comportamento monotono crescente per $k\in[0,\frac{n}{2}]$ raggiungendo il massimo a $k=\frac{n}{2}$. 
-Successivamente l'algoritmo mostra un andamento monotono decrescente per $k\in[\frac{n}{2}+1,n-1]$, andandosi ad allineare con $MoM$ all avvicinarsi agli estremi del vettore. \\
-Riguardo ad $Quick\ Select$ e $MoM$ non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.\\
+
+In questo caso la lunghezza di $n$ è fissata a $10000$ e $k$ varia in $[1,\dots,10000]$.
+Risulta evidente la dipendenza di \HeapSelect{} dallo stesso.
+Dal suo andamento piramidale risulta chiaro come il tempo di esecuzione cresca monotonicamente fino a $k=n/2$ e poi decresca monotonicamente.
+Ciò è ovviemente dovuto al fatto che l'implementazione utilizza una max heap per $k>n/$; se non fosse così è facile immaginare che il tempo continuerebbe a crescere dopo $n/2$.
+
+Riguardo a \QuickSelect{} e \MoMSelect{} non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.
+
+\newpage
+\subsection{Caso peggiore per \QuickSelect}
+Dai casi precedenti si è visto come \QuickSelect{}, nonostante abbia nel caso peggiore una complessità $\Tquad$, difatto con un vettore generato pseudocasualemente risulti essere migliore di \HeapSelect{} e \MoMSelect{}, e quindi può essere un buon candidato come algoritmo di selezione se si è ragionevolmente sicuri che il caso peggiore non possa verificarsi.
+
+Ma vediamo ora due casi in cui ciò può accadere: il primo in cui il vettore è ordinato in modo crescente e $k=1$ e il secondo il cui il vettore è ordinato in modo decrescente e $k=n$.
+
+
 \newpage
 
 \section{Confronto tra MoM}
