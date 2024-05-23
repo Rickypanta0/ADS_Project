@@ -63,8 +63,8 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3, iter=0, k_val
         if final_time > minimum_measurable_time:
             times.append(final_time)
             i += 1
-    return min(times)
-    # return sum(times) / len(times)
+    # return min(times)
+    return sum(times) / len(times)
 
 def compute_points_MoM(*, nmin, nmax, iters):
     timer_resolution = get_timer_resolution()
