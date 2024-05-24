@@ -232,7 +232,22 @@ def select(A, k, *, start=0, end=None, pfunc):
 # funzione "fantoccio" che ritorna sempre end-1 (ultima posizione della lista)
 # come posizione del pivot
 def _standard_pfunc(A, *, start, end):
-    return end - 1
+    mid = (start + end - 1) // 2
+    a, b, c = A[start], A[mid], A[end - 1]
+    if a > b:
+        if a < c:
+            return start
+        elif b > c:
+            return mid
+        else:
+            return end - 1
+    else:
+        if a > c:
+            return start
+        elif b < c:
+            return mid
+        else:
+            return end - 1
 
 
 # quick select si ottiene usando _standard_pfunc come funzione per trovare il

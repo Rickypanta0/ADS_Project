@@ -34,7 +34,7 @@ def generate_input_worst_case_quick_sort(n, max_value, reverse=False):
     return sorted([random.randint(0, max_value) for _ in range(n)], reverse=reverse)
 
 
-def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3, iter=0, k_values=None):
+def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3, iter=0, k_values=None, oder_before_test=False):
     """
     Utilizzi:
     - usare k random:
@@ -52,6 +52,11 @@ def benchmark(algorithm, n, maxv, minimum_measurable_time, runs=3, iter=0, k_val
         #    k = random.randint(1, len(A))
         #else:
         #    k = k_values[i % len(k_values)]
+        if oder_before_test:
+            if k_values==1:
+                A.sort()
+            else:
+                A.sort(reverse=True)
         if gc.isenabled():
             gc.disable()
         start_time = time.monotonic()
@@ -128,17 +133,26 @@ def compute_points_k_fixed(*, nmin, nmax, iters,k_types):
         for i in range(iters):
             print(f"\r{i}", end="")
             n = int(nmin * base_step**i)
+            order_before_test=False
             if types == "fixed k=n/2":
                 k_values = n // 2
             elif types == "random":
                 k_values = random.randint(1, n)
             elif types == "fixed-edge":
-                k_values = n-1
+                k_values = n
+            elif types== "increasing array and k=1":
+                order_before_test=True
+                k_values = 1
+            elif types== "decreasing array and k=n-1":
+                order_before_test=True
+                k_values = n
+            else:
+                raise ValueError(f"Unknown k_type: {k_types}")
             points.append((
                 n,
-                benchmark(median_of_medians_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
-                benchmark(heap_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
-                benchmark(quick_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values),
+                benchmark(median_of_medians_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values,oder_before_test=order_before_test),
+                benchmark(heap_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values,oder_before_test=order_before_test),
+                benchmark(quick_select, n, nmax, minimum_measurable_time, iter=i, k_values=k_values,oder_before_test=order_before_test),
             ))
         dict[types]=points
         print("")
@@ -208,15 +222,15 @@ def plot(points, type_k):
 if __name__ == "__main__":
     nmax=100000
     nmin=1000
-    iters=100
-    k_types = ["fixed k=n/2", "random","fixed-edge"]
+    iters=30
+    k_types = ["increasing array and k=1","decreasing array and k=n-1"]#,"fixed k=n/2", "random","fixed-edge"]
     n_fixed = ["n=10000 whit varying k"]
     graphs=[]
     graphs.append(compute_points_k_fixed(nmin=nmin, nmax=nmax, iters=iters, k_types=k_types))
-    graphs.append(compute_points_n_fixed(nmin=nmin, nmax=10000, iters=iters,k_types=n_fixed))
+    #graphs.append(compute_points_n_fixed(nmin=nmin, nmax=10000, iters=iters,k_types=n_fixed))
     print("")
-    point = compute_points_MoM(nmin=nmin, nmax=nmax, iters=iters)
+    #point = compute_points_MoM(nmin=nmin, nmax=nmax, iters=iters)
     for x in graphs:
         for i in x:
             plot(x[i],i)
-    plotMoM(point["fixed"], "fixed")
+    #plotMoM(point["fixed"], "fixed")

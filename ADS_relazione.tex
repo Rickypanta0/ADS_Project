@@ -5,7 +5,8 @@
 \usepackage{graphicx}
 \usepackage{svg}
 \usepackage{amsthm}
-
+\usepackage{geometry}
+\usepackage{subcaption}
 % matematica
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -31,7 +32,7 @@
 % right=25mm,
 % top=50mm,
 % }
-
+\geometry{a4paper, margin=1in} % Set margins to fit the entire content better
 \usepackage{hyperref}
 
 % \sloppy % ?
@@ -207,9 +208,32 @@ Riguardo a \QuickSelect{} e \MoMSelect{} non traspare nulla di differente da que
 
 \newpage
 \subsection{Caso peggiore per \QuickSelect}
+\begin{figure}[h]
+    \begin{subfigure}[t]{0.50\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{graphs/Select_increasing_n.png}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}[t]{0.50\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{graphs/Select_increasing_xlog.png}
+    \end{subfigure}
+    \vskip\baselineskip
+    \centering
+    \begin{subfigure}[t]{0.50\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{graphs/Select_decreasing_n.png}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}[t]{0.50\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{graphs/Select_decreasing_xlog.png}
+    \end{subfigure}
+
+\end{figure}
 Dai casi precedenti si è visto come \QuickSelect{}, nonostante abbia nel caso peggiore una complessità $\Tquad$, difatto con un vettore generato pseudocasualemente risulti essere migliore di \HeapSelect{} e \MoMSelect{}, e quindi può essere un buon candidato come algoritmo di selezione se si è ragionevolmente sicuri che il caso peggiore non possa verificarsi.
 
-Ma vediamo ora due casi in cui ciò può accadere: il primo in cui il vettore è ordinato in modo crescente e $k=1$ e il secondo il cui il vettore è ordinato in modo decrescente e $k=n$.
+Ma vediamo ora due casi in cui ciò può accadere: il primo in cui il vettore è ordinato in modo crescente e $k=1$ e il secondo il cui il vettore è ordinato in modo decrescente e $k=n$.\\
 
 
 \newpage
