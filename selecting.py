@@ -190,8 +190,33 @@ def median_of_medians_in_place(A, *, start=0, end=None, blocksize=5):
     # finire con subarray_length < 0
     return start
 
-
 def select(A, k, *, start=0, end=None, pfunc):
+    assert A is not None
+    assert 0 <= k < len(A)
+    assert 0 <= start < len(A)
+    assert end is None or start < end <= len(A)
+    assert pfunc is not None
+
+    if end is None:
+        end = len(A)
+
+    ppos = pfunc(A, start=start, end=end)
+    p = partition(A, start=start, end=end, ppos=ppos)
+
+    while p != k:
+        if p > k:
+            end = p
+        else:
+            start = p + 1
+        ppos = pfunc(A, start=start, end=end)
+        p = partition(A, start=start, end=end, ppos=ppos)
+
+    return A[k]
+
+
+
+
+def select_rec(A, k, *, start=0, end=None, pfunc):
     assert A is not None
     assert 0 <= k < len(A)
     assert 0 <= start < len(A)
@@ -232,22 +257,25 @@ def select(A, k, *, start=0, end=None, pfunc):
 # funzione "fantoccio" che ritorna sempre end-1 (ultima posizione della lista)
 # come posizione del pivot
 def _standard_pfunc(A, *, start, end):
-    mid = (start + end - 1) // 2
-    a, b, c = A[start], A[mid], A[end - 1]
-    if a > b:
-        if a < c:
-            return start
-        elif b > c:
-            return mid
-        else:
-            return end - 1
-    else:
-        if a > c:
-            return start
-        elif b < c:
-            return mid
-        else:
-            return end - 1
+    return end-1
+    #mid = (start + end - 1) // 2
+    #a, b, c = A[start], A[mid], A[end - 1]
+    #if a > b:
+    #    if a < c:
+    #        return start
+    #    elif b > c:
+    #        return mid
+    #    else:
+    #        return end - 1
+    #else:
+    #    if a > c:
+    #        return start
+    #    elif b < c:
+    #        return mid
+    #    else:
+    #        return end - 1
+
+
 
 
 # quick select si ottiene usando _standard_pfunc come funzione per trovare il
