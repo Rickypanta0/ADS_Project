@@ -48,11 +48,6 @@ def generate_input_worst_case_quick_select(n, max_value, reverse=False):
     return sorted([random.randint(0, max_value) for _ in range(n)], reverse=reverse)
 
 
-generate_input_worst_case_quick_select_reversed = partial(
-    generate_input_worst_case_quick_select, reverse=True
-)
-
-
 def benchmark(
     algorithm,
     array_length,
