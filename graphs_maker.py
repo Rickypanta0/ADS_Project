@@ -13,7 +13,7 @@ from selecting import (
 )
 
 MIN_ARRAY_LENGTH = 10**3
-MAX_ARRAY_LENGTH = 10**4
+MAX_ARRAY_LENGTH = 10**5
 MAX_VALUE = 10**4
 ITERS = 10**2
 
@@ -183,19 +183,19 @@ if __name__ == "__main__":
     # Caso k=n/2
     points_middle = compute_points(
         "Caso k=n/2",
-        (median_of_medians_select, heap_select, quick_select),
+        [median_of_medians_select, heap_select, quick_select],
         k_value=lambda n: n // 2,
     )
     plot_points(
         points_middle,
-        ("Median of medians select", "Heap select", "Quick select"),
+        ["Median of medians select", "Heap select", "Quick select"],
         "Caso k=n/2",
         "Lunghezza vettore (lineare)",
         "Tempo (s) (lineare)",
     )
     plot_points(
         points_middle,
-        ("Median of medians select", "Heap select", "Quick select"),
+        ["Median of medians select", "Heap select", "Quick select"],
         "Caso k=n/2",
         "Lunghezza vettore (log)",
         "Tempo (s) (log)",
