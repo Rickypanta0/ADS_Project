@@ -58,14 +58,14 @@
         \vspace{1cm}
         \begin{figure}[h]
             \centering
-            \includegraphics[width=.5\textwidth]{photo/uniud_logo.pdf}
+            \includegraphics[width=.5\textwidth]{photo/uniud_logo.png}
         \end{figure}
         \vspace{1.5cm}
         {\LARGE Università degli studi di Udine\par}
         {\LARGE Dipartimento di scienze Informatiche, Matematiche e Fisiche\par}
         \vfill
         {\Large Anno Accademico 2023/2024\par}
-        {\Large Matricole: 162367, 162473, 162013\par}
+        {\Large Matricole: 162367, 162013, 162473\par}
         {\Large\itshape Gerardi Ludovico, Sclauzero Lorenzo, Pantanali Riccardo\par}
     \end{center}
 \end{titlepage}
@@ -111,6 +111,7 @@ Sono proposte due varianti:
 \begin{enumerate}
     \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
     \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
+    \item in-place: non utilizzando le chiamate ricorsive;
 \end{enumerate}
 
 In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Olin.
@@ -137,8 +138,6 @@ L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misur
 
 \section{Rappresentazione grafica dei risultati}
 \label{sec:grafici}
-
-\subsection{Caso \texorpdfstring{$\symbf{k=n/2}$}{k}}
 \begin{figure}[h]
             \centering
             \includegraphics[width=.83\textwidth]{graphs/k_const_n.png}
@@ -209,31 +208,12 @@ Riguardo a \QuickSelect{} e \MoMSelect{} non traspare nulla di differente da que
 \newpage
 \subsection{Caso peggiore per \QuickSelect}
 \begin{figure}[h]
-    \begin{subfigure}[t]{0.50\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{graphs/Select_increasing_n.png}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}[t]{0.50\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{graphs/Select_increasing_xlog.png}
-    \end{subfigure}
-    \vskip\baselineskip
     \centering
-    \begin{subfigure}[t]{0.50\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{graphs/Select_decreasing_n.png}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}[t]{0.50\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{graphs/Select_decreasing_xlog.png}
-    \end{subfigure}
-
+    \includegraphics[width=.83\textwidth]{graphs/QS_wrost_case.png}
+    \includegraphics[width=.83\textwidth]{graphs/QS_2xlog.png}
 \end{figure}
 Dai casi precedenti si è visto come \QuickSelect{}, nonostante abbia nel caso peggiore una complessità $\Tquad$, difatto con un vettore generato pseudocasualemente risulti essere migliore di \HeapSelect{} e \MoMSelect{}, e quindi può essere un buon candidato come algoritmo di selezione se si è ragionevolmente sicuri che il caso peggiore non possa verificarsi.
-
-Ma vediamo ora un caso in cui ciò può accadere, cioè quando il vettore è ordinato in modo crescente e $k=1$.
+Ma vediamo ora due casi in cui ciò può accadere: il primo in cui il vettore è ordinato in modo crescente e $k=1$ ovvero quello rappresentato dai grafici soprastanti mentre il secondo in cui il vettore è ordinato in modo decrescente e $k=n$ che però nel nostro caso non risulta essere il peggiore. Questo è dovuto dal fatto che nel nostro codice il pivot risulta essere sempre l'ultimo elemento della porzione. Di conseguenza il pivot scelto è sempre l'elemento più piccolo della porzione corrente dell'array, ma poiché stiamo cercando l'elemento più grande, lo troviamo subito senza dover iterare attraverso tutte le partizioni\\
 
 
 \newpage
@@ -245,5 +225,5 @@ Ma vediamo ora un caso in cui ciò può accadere, cioè quando il vettore è ord
     \includegraphics[width=.83\textwidth]{graphs/MoMs_n.png}
     \includegraphics[width=.83\textwidth]{graphs/MoMs_2xlog.png}
 \end{figure}
-Come si può notare i due algoritmi hanno degli andamenti molto simili, avendo entrambi una complessità $O(n)$. La versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
+Come si può notare i tre algoritmi hanno degli andamenti molto simili, avendo una complessità $O(n)$. La versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
 \end{document}
