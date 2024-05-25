@@ -14,7 +14,7 @@ from selecting import (
 )
 
 MIN_ARRAY_LENGTH = 10**3
-MAX_ARRAY_LENGTH = 10**4
+MAX_ARRAY_LENGTH = 10**5
 MAX_VALUE = 10**4
 ITERS = 10**2
 
@@ -47,11 +47,6 @@ def generate_input_worst_case_quick_select(n, max_value, reverse=False):
     in ordine crescente.
     """
     return sorted([random.randint(0, max_value) for _ in range(n)], reverse=reverse)
-
-
-generate_input_worst_case_quick_select_reversed = partial(
-    generate_input_worst_case_quick_select, reverse=True
-)
 
 
 def benchmark(
@@ -297,6 +292,7 @@ if __name__ == "__main__":
     #    "Tempo (s) (log)",
     #    log_scale=True,
     # )  
+    ##Caso n fissato k variato
     points_n_fixed_var_k=compute_points_n_fixed()
     plot_points(
         points_n_fixed_var_k,

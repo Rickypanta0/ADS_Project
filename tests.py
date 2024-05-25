@@ -20,7 +20,8 @@ class SelectTest(unittest.TestCase):
         self.sorted_input = sorted(self.generated_input)
 
         # usa la versione non in-place come riferimento
-        self.mm = median_of_medians_non_in_place(self.generated_input.copy())
+        mm_pos = median_of_medians_non_in_place(self.generated_input.copy())
+        self.mm = self.generated_input[mm_pos]
 
     def test_mm_select(self):
         # controlla che median of medians select sia corretto per ogni posizione
