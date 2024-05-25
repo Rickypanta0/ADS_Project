@@ -318,16 +318,16 @@ if __name__ == "__main__":
     # Commentare i vari casi secondo le necessità
 
     # Caso k=n/2
-    #plot_middle()
+    plot_middle()
 
     # Caso k=n
-    #plot_extreme()
+    plot_extreme()
 
     # Caso k random
-    #plot_random()
+    plot_random()
 
     # Confronto MoM
-    #plot_mom()
+    plot_mom()
 
     # Caso peggiore per quick select
     # In questo caso la lunghezza massima del vettore è 10000
@@ -336,4 +336,4 @@ if __name__ == "__main__":
     #plot_worst_case_quick_select()
 
     # Caso n fissato k variato
-    #plot_var_k()
+    plot_var_k()
