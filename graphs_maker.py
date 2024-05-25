@@ -13,9 +13,9 @@ from selecting import (
     median_of_medians_p,
 )
 
-MIN_ARRAY_LENGTH = 10**3
+MIN_ARRAY_LENGTH = 10**2
 MAX_ARRAY_LENGTH = 10**5
-MAX_VALUE = 10**4
+MAX_VALUE = 10**5
 ITERS = 10**2
 
 RELATIVE_ERROR = 0.001
@@ -23,9 +23,9 @@ RELATIVE_ERROR = 0.001
 
 def get_timer_resolution():
     """Determina la risoluzione del timer."""
-    start = time.monotonic()
+    start = time.perf_counter()
     while True:
-        end = time.monotonic()
+        end = time.perf_counter()
         if end != start:
             break
     return end - start
@@ -150,7 +150,7 @@ def compute_points_n_fixed(
     n=10000,
     iters=100,
     algorithms=(median_of_medians_select, heap_select, quick_select),
-    input_function=generate_input
+    input_function=generate_input,
 ):
     timer_resolution = get_timer_resolution()
     minimum_measurable_time = get_minimum_measurable_time(0.001, timer_resolution)
@@ -178,134 +178,162 @@ def compute_points_n_fixed(
     return points
 
 
-if __name__ == "__main__":
-    # Manca il caso con n fissato e k variato
+def plot_middle():
+    points_middle = compute_points(
+        "Caso k=n/2",
+        (median_of_medians_select, heap_select, quick_select),
+        k_value=lambda n: n // 2,
+    )
+    plot_points(
+        points_middle,
+        ("Median of medians select", "Heap select", "Quick select"),
+        "Caso k=n/2",
+        "Lunghezza vettore (lineare)",
+        "Tempo (s) (lineare)",
+    )
+    plot_points(
+        points_middle,
+        ("Median of medians select", "Heap select", "Quick select"),
+        "Caso k=n/2",
+        "Lunghezza vettore (log)",
+        "Tempo (s) (log)",
+        log_scale=True,
+    )
 
-    #Caso k=n/2
-    #points_middle = compute_points(
-    #    "Caso k=n/2",
-    #    (median_of_medians_select, heap_select, quick_select),
-    #    k_value=lambda n: n // 2,
-    #)
-    #plot_points(
-    #    points_middle,
-    #    ("Median of medians select", "Heap select", "Quick select"),
-    #    "Caso k=n/2",
-    #    "Lunghezza vettore (lineare)",
-    #    "Tempo (s) (lineare)",
-    #)
-    #plot_points(
-    #    points_middle,
-    #    ("Median of medians select", "Heap select", "Quick select"),
-    #    "Caso k=n/2",
-    #    "Lunghezza vettore (log)",
-    #    "Tempo (s) (log)",
-    #    log_scale=True,
-    #)
-#
-    ## Caso k=n
-    #points_extreme = compute_points(
-    #    "Caso k=n",
-    #    [median_of_medians_select, heap_select, quick_select],
-    #    k_value=lambda n: n,
-    #)
-    #plot_points(
-    #    points_extreme,
-    #    ["Median of medians select", "Heap select", "Quick select"],
-    #    "Caso k=n",
-    #    "Lunghezza vettore (lineare)",
-    #    "Tempo (s) (lineare)",
-    #)
-    #plot_points(
-    #    points_extreme,
-    #    ["Median of medians select", "Heap select", "Quick select"],
-    #    "Caso k=n",
-    #    "Lunghezza vettore (log)",
-    #    "Tempo (s) (log)",
-    #    log_scale=True,
-    #)
-#
-    ## Caso k random
-    #points_random = compute_points(
-    #    "Caso k random",
-    #    [median_of_medians_select, heap_select, quick_select],
-    #    k_value=lambda n: random.randint(1, n),
-    #)
-    #plot_points(
-    #    points_random,
-    #    ["Median of medians select", "Heap select", "Quick select"],
-    #    "Caso k random",
-    #    "Lunghezza vettore (lineare)",
-    #    "Tempo (s) (lineare)",
-    #)
-    #plot_points(
-    #    points_random,
-    #    ["Median of medians select", "Heap select", "Quick select"],
-    #    "Caso k random",
-    #    "Lunghezza vettore (log)",
-    #    "Tempo (s) (log)",
-    #    log_scale=True,
-    #)
-#
-    ## Confronto MoM
-    #points_mom = compute_points(
-    #    "Confronto tra MoM con k=n/2",
-    #    (median_of_medians_select, median_of_medians_np, median_of_medians_p),
-    #    k_value=lambda n: n // 2,
-    #)
-    #plot_points(
-    #    points_mom,
-    #    ("MoM quasi in-place", "MoM non in-place", "MoM in-place"),
-    #    "Confronto tra MoM con k=n/2",
-    #    "Lunghezza vettore (lineare)",
-    #    "Tempo (s) (lineare)",
-    #)
-    #plot_points(
-    #    points_mom,
-    #    ("MoM quasi in-place", "MoM non in-place", "MoM in-place"),
-    #    "Confronto tra MoM con k=n/2",
-    #    "Lunghezza vettore (log)",
-    #    "Tempo (s) (log)",
-    #    log_scale=True,
-    #)
-#
-    ### Caso peggiore per quick select
-    ### N.B. molto lento
-    #points_worst_case_quick_select = compute_points(
-    #    "Caso peggiore quick select",
-    #    (median_of_medians_select, heap_select, quick_select),
-    #    k_value=lambda n: 1,
-    #    input_function=generate_input_worst_case_quick_select,
-    #)
-    #plot_points(
-    #    points_worst_case_quick_select,
-    #    ("MoM select", "Heap select", "Quick select"),
-    #    "Caso peggiore quick select",
-    #    "Lunghezza vettore (lineare)",
-    #    "Tempo (s) (lineare)",
-    # )
-    #plot_points(
-    #    points_worst_case_quick_select,
-    #    ("MoM select", "Heap select", "Quick select"),
-    #    "Caso peggiore quick select",
-    #    "Lunghezza vettore (log)",
-    #    "Tempo (s) (log)",
-    #    log_scale=True,
-    # )  
-    ##Caso n fissato k variato
-    points_n_fixed_var_k=compute_points_n_fixed()
+
+def plot_extreme():
+    points_extreme = compute_points(
+        "Caso k=n",
+        [median_of_medians_select, heap_select, quick_select],
+        k_value=lambda n: n,
+    )
+    plot_points(
+        points_extreme,
+        ["Median of medians select", "Heap select", "Quick select"],
+        "Caso k=n",
+        "Lunghezza vettore (lineare)",
+        "Tempo (s) (lineare)",
+    )
+    plot_points(
+        points_extreme,
+        ["Median of medians select", "Heap select", "Quick select"],
+        "Caso k=n",
+        "Lunghezza vettore (log)",
+        "Tempo (s) (log)",
+        log_scale=True,
+    )
+
+
+def plot_random():
+    points_random = compute_points(
+        "Caso k random",
+        [median_of_medians_select, heap_select, quick_select],
+        k_value=lambda n: random.randint(1, n),
+    )
+    plot_points(
+        points_random,
+        ["Median of medians select", "Heap select", "Quick select"],
+        "Caso k random",
+        "Lunghezza vettore (lineare)",
+        "Tempo (s) (lineare)",
+    )
+    plot_points(
+        points_random,
+        ["Median of medians select", "Heap select", "Quick select"],
+        "Caso k random",
+        "Lunghezza vettore (log)",
+        "Tempo (s) (log)",
+        log_scale=True,
+    )
+
+
+def plot_mom():
+    points_mom = compute_points(
+        "Confronto tra MoM con k=n/2",
+        (median_of_medians_select, median_of_medians_np, median_of_medians_p),
+        k_value=lambda n: n // 2,
+    )
+    plot_points(
+        points_mom,
+        ("MoM quasi in-place", "MoM non in-place", "MoM in-place"),
+        "Confronto tra MoM con k=n/2",
+        "Lunghezza vettore (lineare)",
+        "Tempo (s) (lineare)",
+    )
+    plot_points(
+        points_mom,
+        ("MoM quasi in-place", "MoM non in-place", "MoM in-place"),
+        "Confronto tra MoM con k=n/2",
+        "Lunghezza vettore (log)",
+        "Tempo (s) (log)",
+        log_scale=True,
+    )
+
+
+def plot_worst_case_quick_select():
+    points_worst_case_quick_select = compute_points(
+        "Caso peggiore quick select",
+        [median_of_medians_select, heap_select, quick_select],
+        k_value=lambda n: 1,
+        input_function=generate_input_worst_case_quick_select,
+        max_array_length=10**4,
+    )
+    plot_points(
+        points_worst_case_quick_select,
+        ["MoM select", "Heap select", "Quick select"],
+        "Caso peggiore quick select",
+        "Lunghezza vettore (lineare)",
+        "Tempo (s) (lineare)",
+    )
+    plot_points(
+        points_worst_case_quick_select,
+        ["MoM select", "Heap select", "Quick select"],
+        "Caso peggiore quick select",
+        "Lunghezza vettore (log)",
+        "Tempo (s) (log)",
+        log_scale=True,
+    )
+
+
+def plot_var_k():
+    points_n_fixed_var_k = compute_points_n_fixed()
     plot_points(
         points_n_fixed_var_k,
-        ("MoM select", "Heap select", "Quick select"),
+        ["MoM select", "Heap select", "Quick select"],
         "Caso n fissato k variato",
         "Indice k (log)",
         "Tempo (s) (log)",
     )
     plot_points(
         points_n_fixed_var_k,
-        ("MoM select", "Heap select", "Quick select"),
+        ["MoM select", "Heap select", "Quick select"],
         "Caso n fissato k variato",
         "Indice k (log)",
         "Tempo (s) (log)",
         log_scale=True,
     )
+
+
+if __name__ == "__main__":
+    # Commentare i vari casi secondo le necessità
+
+    # Caso k=n/2
+    #plot_middle()
+
+    # Caso k=n
+    #plot_extreme()
+
+    # Caso k random
+    #plot_random()
+
+    # Confronto MoM
+    #plot_mom()
+
+    # Caso peggiore per quick select
+    # In questo caso la lunghezza massima del vettore è 10000
+    # perché altrimenti le misurazione richiedono troppo tempo
+    # N.B. molto lento
+    #plot_worst_case_quick_select()
+
+    # Caso n fissato k variato
+    #plot_var_k()
