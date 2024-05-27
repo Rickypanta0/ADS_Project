@@ -92,7 +92,7 @@ Infine nella sezione \ref{sec:confronto-mom} viene proposto un confronto tra alc
 \paragraph{\QuickSelect}
 Questo algoritmo partiziona ricorsivamente $v$ rispetto a un elemento scelto come pivot e confronta la posizione finale del pivot con $k$: se sono uguali allora l'algoritmo termina, ritornando $v[k]$; altrimenti effettua una chiamata ricorsiva sulla partizione sinistra o destra di $v$, a seconda che $k$ sia rispettivamente minore o maggiore della posizione finale del pivot.
 Quest'ultimo viene scelto sempre come l'ultimo elemento del sottovettore considerato.
-Questo approccio fa in modo che la complessità nel caso peggiore sia \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio è \Tlin.
+Questo approccio fa in modo che la complessità nel caso peggiore sia \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio sia \Tlin.
 D'altra parte l'overhead dovuto alla scelta del pivot è molto basso, il che, come si vedrà, porta ad un vantaggio rispetto a \MoMSelect{} nel caso di vettore generati pseudocasualmente.
 
 \paragraph{\HeapSelect}
