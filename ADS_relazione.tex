@@ -108,7 +108,7 @@ Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect:
 La differenza tra i due algoritmo sta nella scelta del pivot.
 Infatti \MoMSelect{} utilizza una procedura ausiliaria che calcola la posizione della mediana delle mediane all'interno del sottovettore considerato.
 Nello specifico tale procedura divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate finché non rimane un solo elemento: la mediana delle mediane.
-Sono proposte due varianti:
+Sono proposte tre varianti:
 \begin{enumerate}
     \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
     \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
@@ -119,7 +119,7 @@ In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pe
 Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in-place.
 
 \subsection{Algoritmo per la generazione dei vettori}
-La lunghezza $n$ del vettori generati varia da $1000$ ($n_{\min}$) a $100000$ ($n_{\max}$), mentre i valori degli interi variano $0$ a $100000$.
+La lunghezza $n$ dei vettori generati varia da $1000$ ($n_{\min}$) a $100000$ ($n_{\max}$), mentre i valori degli interi variano da $0$ a $100000$.
 In certe misurazioni la lunghezza dei vettori cresce secondo la serie geometrica
 \[
     L(i) = n_{\min} \cdot \left(\frac{n_{\max}}{n_{\min}}\right)^{i/99}
@@ -130,10 +130,10 @@ Si noti in particolare che $L(0) = n_{\min}$ e $L(99) = n_{\max}$.
 
 \section{Misurazione dei tempi di esecuzione}
 \label{sec:misurazione}
-La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero un numero di volte tale da garantire un errore massimo relativo pari a \( f_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{f} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
+La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero, un numero di volte tale da garantire un errore massimo relativo pari a \( f_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{f} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
 
-Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array generato pseudo-casualmente di lunghezza \( n \), differente ad ogni iterazione.
-L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi\\
+Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array, generato pseudo-casualmente di lunghezza \( n \), differente ad ogni iterazione.
+L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi.\\
 
 \newpage
 
@@ -144,7 +144,7 @@ L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misur
             \includegraphics[width=.83\textwidth]{graphs/k_const_n.png}
             \includegraphics[width=.83\textwidth]{graphs/k_const_2xlog.png}
 \end{figure}
-Come evidenziato dai grafici, nel caso in cui $k=n/2$ l'algoritmo \HeapSelect{} è più inefficiente rispetto a \QuickSelect{} e \MoMSelect{}.
+Come è evidenziato dai grafici, nel caso in cui $k=n/2$ l'algoritmo \HeapSelect{} è più inefficiente rispetto a \QuickSelect{} e \MoMSelect{}.
 Per spiegare questo comportamento occorre tenere conto della complessità di \HeapSelect{}; infatti sostituendo $k$ con $n/2$ nella formula della complessità di ottiene:
 \[\begin{split}
 	O(n + k\log k) 	& = O\left(n + \frac{n}{2}\log \frac{n}{2}\right) \\
@@ -156,7 +156,7 @@ cioè la crescita di \HeapSelect{} risulta superlineare.
 È facile vedere che lo stesso risultato si ottiene ogni volta che $k$ è una frazione di $n$.
 
 Invece \MoMSelect{} e \QuickSelect{} hanno entrambi complessità $O(n)$.
-Tuttavia \QuickSelect{} risulta più veloce rispetto a \MoMSelect{} e ciò è dovuto all'overhead richiesto da quest'ultimo algoritmo per calcolare la mediana delle mediane.
+Tuttavia \QuickSelect{} risulta più veloce rispetto a \MoMSelect{}, ciò è dovuto all'overhead richiesto da quest'ultimo algoritmo per calcolare la mediana delle mediane.
 
 \newpage
 \subsection{Caso k estremo}
@@ -166,7 +166,7 @@ Tuttavia \QuickSelect{} risulta più veloce rispetto a \MoMSelect{} e ciò è do
             \includegraphics[width=.83\textwidth]{graphs/k_last_2xlog.png}
 \end{figure}
 Nel caso in cui $k$ sia un estemo del vettore, cioè $k=1$ o $k=n$, si nota un netto miglioramento da parte di \HeapSelect{}, tanto da diventare migliore di \MoMSelect{}.
-Infatti essendo $k$ costante l'apporto dato dal fattore $k\log k$ diventa trascurabile e quindi il costo di \HeapSelect{} diventa $O(n)$; tale costo è per la maggior parte dovuto alla costruzione dell'heap.
+Infatti, dato che $k$ è costante, il contributo del fattore $k\log k$ diventa trascurabile e quindi il costo di \HeapSelect{} diventa $O(n)$; tale costo è per la maggior parte dovuto alla costruzione dell'heap.
 Possiamo quindi affermare che questa operazione risulta più veloce, seppure di poco, rispetto al calcolo della mediana della mediane.
 Notiamo che siccome per $k > n/2$ si utilizza una max heap, il costo nel caso in cui $k=n$ è pari a quello in cui $k=1$.
 
@@ -184,7 +184,7 @@ Per quanto riguarda \QuickSelect{} e \MoMSelect{}, il loro andamento risulta pra
 Nel caso in cui $k$ sia casuale emerge chiaramente l'indipendenza dell'algoritmo \MoMSelect{} da $k$: il suo andamento risulta infatti molto stabile al variare di $k$, e ciò è da attribuirsi al calcolo della mediana delle mediane, che assicura un andamento lineare.
 
 Invece \HeapSelect{} mostra un andamento più instabile.
-Ciò è dovuto al fatto che $k$ determina la sue complessità complessità, che varia da $O(n)$ a $O(n\log n)$, come si è già visto.
+Ciò è dovuto al fatto che $k$ determina la sua complessità, che varia da $O(n)$ a $O(n\log n)$, come si è già visto.
 
 Anche \QuickSelect{} si mostra più instabile di \MoMSelect{}.
 Ricordiamo infatti che nel caso peggiore la complessità di \QuickSelect{} è $\Theta(n^2)$.
@@ -199,10 +199,10 @@ Ricordiamo infatti che nel caso peggiore la complessità di \QuickSelect{} è $\
     \includegraphics[width=.83\textwidth]{graphs/n_fixed_2xlog.png}
 \end{figure}
 
-In questo caso la lunghezza di $n$ è fissata a $10000$ e $k$ varia in $[1,\dots,10000]$.
+In questo caso la lunghezza di $n$ è fissata a $10000$ e $k$ varia nell'intervallo $[1,\dots,10000]$.
 Risulta evidente la dipendenza di \HeapSelect{} dallo stesso.
 Dal suo andamento piramidale risulta chiaro come il tempo di esecuzione cresca monotonicamente fino a $k=n/2$ e poi decresca monotonicamente.
-Ciò è ovviemente dovuto al fatto che l'implementazione utilizza una max heap per $k>n/$; se non fosse così è facile immaginare che il tempo continuerebbe a crescere dopo $n/2$.
+Ciò è naturalmente dovuto al fatto che l'implementazione utilizza una max heap per $k>n/2$; se non fosse così è facile immaginare che il tempo continuerebbe a crescere dopo $n/2$.
 
 Riguardo a \QuickSelect{} e \MoMSelect{} non traspare nulla di differente da quello che abbiamo già evidenziato nelle sezioni precedenti.
 
