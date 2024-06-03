@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,12pt]{article}
 \usepackage[italian]{babel}
 
 % immagini
@@ -93,7 +93,7 @@ Infine nella sezione \ref{sec:confronto-mom} viene proposto un confronto tra alc
 Questo algoritmo partiziona iterativamente $v$ rispetto a un elemento scelto come pivot e confronta la posizione finale del pivot con $k$: se sono uguali allora l'algoritmo termina, ritornando $v[k]$; altrimenti la prossima iterazione si restringe alla partizione sinistra o destra di $v$, a seconda che $k$ sia rispettivamente minore o maggiore della posizione finale del pivot.
 Quest'ultimo viene scelto sempre come l'ultimo elemento del sottovettore considerato.
 Questo approccio fa in modo che la complessità nel caso peggiore sia \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio sia \Tlin.
-D'altra parte l'overhead dovuto alla scelta del pivot è molto basso, il che, come si vedrà, porta ad un vantaggio rispetto a \MoMSelect{} nel caso di vettore generati pseudo-casualmente.
+D'altra parte l'overhead dovuto alla scelta del pivot è molto basso, il che, come si vedrà, porta ad un vantaggio rispetto a \MoMSelect{} nel caso di vettori generati pseudo-casualmente.
 
 \paragraph{\HeapSelect}
 L'algoritmo sfrutta due heap $H_1$ e $H_2$.
@@ -102,6 +102,7 @@ Ad ogni iterazione viene estratta la radice $r$ da $H_2$ e vengono aggiunti i fi
 Dopo $k-1$ iterazioni $r$ è l'elemento cercato, cioè il $k$-esimo più piccolo all'interno di $v$.
 Siccome cercare il $k$-esimo elemento più piccolo equivale a cercare l'elemento $(n-k+1)$-esimo più grande, se $k>n/2$ si utilizza una max-heap per $H_2$, il che consente di ridurre il numero di iterazioni necessarie.
 Questo algoritmo ha una complessità temporale pari a $O(n+k\log k)$.
+Essendo $1 \le k \le n$, la complessità effettiva varia da $O(n)$ a $O(n\log n)$; nella sezione \ref{sec:grafici} si analizzano entrambi i casi.
 
 \paragraph{\MoMSelect}
 Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: iterare sulla porzione di vettore che contiene l'elemento cercato.
@@ -114,7 +115,7 @@ Sono proposte tre varianti:
     \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
     \item in-place: riutilizza lo spazio allocato per il vettore originale e non effettua chiamate ricorsive.
 \end{enumerate}
-In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Olin.
+In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Tlin{}.
 Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in-place.
 
 Data la loro somiglianza, si è deciso di implementare \QuickSelect{} e \MoMSelect{} con un'unica procedura di selezione; ciò che cambia è la procedura per la scelta del pivot.
@@ -134,7 +135,7 @@ Vi è anche un'altra procedura per la generazione di un vettore, utilizzata per 
 
 \section{Misurazione dei tempi di esecuzione}
 \label{sec:misurazione}
-La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero, un numero di volte tale da garantire un errore massimo relativo pari a \( f_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{f} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
+La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero, un numero di volte tale da garantire un errore massimo relativo pari a \( e_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{e_{\max}} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
 
 Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array, generato pseudo-casualmente di lunghezza \( n \), differente ad ogni iterazione.
 L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi.
@@ -146,6 +147,8 @@ Prima o dopo il codice che effettua la misurazione sono state inserite istruzion
 
 \section{Rappresentazione grafica dei risultati}
 \label{sec:grafici}
+
+\subsection{Caso $k=n/2$}
 \begin{figure}[h]
             \centering
             \includegraphics[width=.83\textwidth]{graphs/k_const_n.png}
@@ -165,7 +168,6 @@ cioè la crescita di \HeapSelect{} risulta superlineare.
 Invece \MoMSelect{} e \QuickSelect{} hanno entrambi complessità $O(n)$.
 Tuttavia \QuickSelect{} risulta più veloce rispetto a \MoMSelect{}, ciò è dovuto all'overhead richiesto da quest'ultimo algoritmo per calcolare la mediana delle mediane.
 
-\newpage
 \subsection{Caso k estremo}
 \begin{figure}[h]
             \centering
@@ -190,10 +192,8 @@ Per quanto riguarda \QuickSelect{} e \MoMSelect{}, il loro andamento risulta pra
 \end{figure}
 
 Nel caso in cui $k$ sia casuale emerge chiaramente l'indipendenza dell'algoritmo \MoMSelect{} da $k$: il suo andamento risulta infatti molto stabile al variare di $k$, e ciò è da attribuirsi al calcolo della mediana delle mediane, che assicura un andamento lineare.
-
 Invece \HeapSelect{} mostra un andamento più instabile.
 Ciò è dovuto al fatto che $k$ determina la sua complessità, che varia da $O(n)$ a $O(n\log n)$, come si è già visto.
-
 Anche \QuickSelect{} si mostra più instabile di \MoMSelect{}.
 Ricordiamo infatti che nel caso peggiore la complessità di \QuickSelect{} è $\Theta(n^2)$.
 
@@ -235,7 +235,6 @@ Si tratta del caso in cui il vettore è ordinato in modo crescente, $k=n$ e il p
 La nostra implementazine non lo permette in quanto il pivot è selezionato sempre come l'ultimo elemento del vettore, e di conseguenza risulta essere addirittura il caso migliore.
 
 
-\newpage
 
 \section{Confronto tra MoM}
 \label{sec:confronto-mom}
@@ -249,6 +248,18 @@ Proponiamo infine un confronto tra tre algoritmi di selezione che utilizzano var
 
 Dal grafico logaritmico notiamo che i tre andamenti sono paralleli, come ci si aspetta, essendo la complessità della procedura di selezione sempre $O(n)$, indipendentemente dall'algoritmo di calcolo della mediana delle mediane.
 D'altra parte dal grafico lineare vediamo un progressivo discostamento della versione non-in-place, cioè quella che utilizza un nuovo vettore per tenere traccia delle mediane.
+Evidentemente il costo della gestione di un vettore ausiliario è significativo rispetto al a quello dovuto alle chiamate ricorsive e alle iterazioni; infatti la differenza tra la versione quasi in-place e quella in-place è praticamente trascurabile.
 
-Come si può notare i tre algoritmi hanno degli andamenti molto simili, avendo una complessità $O(n)$. La versione non in place a causa delle chiamate ricorsive e dell'utilizzo di due array supplementari si rivela essere meno prestante al crescere della lunghezza dell'array.\\
+\section{Conclusione}
+Dall'analisi fatta nella sezione precedente possiamo trarre le seguenti conclusioni:
+\begin{itemize}
+	\item \QuickSelect{} risulta essere l'algoritmo più efficiente eccetto nel suo caso peggiore.
+		Ciò è dovuto al basso overhead richiesto per la selezione del pivot.
+		Quindi è un buon candidato come algoritmo di selezione.
+	\item \HeapSelect{} è un buon algoritmo quando $k$ è vicino agli estremi, ma la sua complessità nel caso in cui $k$ sia una frazione della dimensione dell'input lo rende peggiore degli altri due algoritmi analizzati.
+		Inoltre nel caso in cui $k$ vari di molto durante successive selezioni porta le prestazioni di \HeapSelect{} ad essere instabili.
+	\item \MoMSelect{} è l'unico algoritmo con una complessità ottimale nel caso peggiore, ma l'overhead dovuto alla selezione del pivot lo rende meno efficiente di \QuickSelect{} in pratica.
+		Contrariamente a \HeapSelect{} le sue prestazioni rimangono stabili al variare di $k$.
+\end{itemize}
+
 \end{document}

@@ -13,12 +13,12 @@ from selecting import (
     median_of_medians_p,
 )
 
-MIN_ARRAY_LENGTH = 10**2
+MIN_ARRAY_LENGTH = 10**3
 MAX_ARRAY_LENGTH = 10**5
 MAX_VALUE = 10**5
 ITERS = 10**2
 
-RELATIVE_ERROR = 0.001
+RELATIVE_ERROR = 0.01
 
 
 def get_timer_resolution():
@@ -69,15 +69,15 @@ def benchmark(
         generated_input = input_function(array_length, max_value)
         if gc.isenabled():
             gc.disable()
-        start_time = time.monotonic()
+        start_time = time.perf_counter()
         k = k_value(array_length) - 1
         assert 0 <= k < array_length
         algorithm(generated_input, k)
-        end_time = time.monotonic()
+        end_time = time.perf_counter()
         if not gc.isenabled():
             gc.enable()
         elapsed_time = end_time - start_time
-        # if elapsed_time > minimum_measurable_time:
+        #if elapsed_time > minimum_measurable_time:
         recorded_times.append(elapsed_time)
         i += 1
     return sum(recorded_times) / len(recorded_times)
