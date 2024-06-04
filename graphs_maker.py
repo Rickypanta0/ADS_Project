@@ -13,12 +13,12 @@ from selecting import (
     median_of_medians_p,
 )
 
-MIN_ARRAY_LENGTH = 10**3
+MIN_ARRAY_LENGTH = 10**2
 MAX_ARRAY_LENGTH = 10**5
 MAX_VALUE = 10**5
 ITERS = 10**2
 
-RELATIVE_ERROR = 0.01
+RELATIVE_ERROR = 0.001
 
 
 def get_timer_resolution():
@@ -56,31 +56,25 @@ def benchmark(
     k_value,
     minimum_measurable_time,
     input_function,
-    runs=3,
 ):
     assert algorithm is not None
     assert array_length > 0
     assert input_function is not None
-    assert runs > 0
 
-    recorded_times = []
+    generated_input = input_function(array_length, max_value)
     i = 0
-    while i < runs:
-        generated_input = input_function(array_length, max_value)
-        if gc.isenabled():
-            gc.disable()
-        start_time = time.perf_counter()
-        k = k_value(array_length) - 1
-        assert 0 <= k < array_length
-        algorithm(generated_input, k)
-        end_time = time.perf_counter()
-        if not gc.isenabled():
-            gc.enable()
-        elapsed_time = end_time - start_time
-        #if elapsed_time > minimum_measurable_time:
-        recorded_times.append(elapsed_time)
+    if gc.isenabled():
+        gc.disable()
+    start_time = time.perf_counter()
+    k = k_value(array_length) - 1
+    assert 0 <= k < array_length
+    while ((end_time := time.perf_counter()) - start_time) < minimum_measurable_time:
+        algorithm(generated_input.copy(), k)
         i += 1
-    return sum(recorded_times) / len(recorded_times)
+    if not gc.isenabled():
+        gc.enable()
+    assert i != 0
+    return (end_time - start_time) / i
 
 
 def compute_points(
@@ -318,16 +312,16 @@ if __name__ == "__main__":
     # Commentare i vari casi secondo le necessità
 
     # Caso k=n/2
-    plot_middle()
+    #plot_middle()
 
     # Caso k=n
-    plot_extreme()
+    #plot_extreme()
 
     # Caso k random
-    plot_random()
+    #plot_random()
 
     # Confronto MoM
-    plot_mom()
+    #plot_mom()
 
     # Caso peggiore per quick select
     # In questo caso la lunghezza massima del vettore è 10000
@@ -336,4 +330,5 @@ if __name__ == "__main__":
     #plot_worst_case_quick_select()
 
     # Caso n fissato k variato
-    plot_var_k()
+    #plot_var_k()
+    pass
