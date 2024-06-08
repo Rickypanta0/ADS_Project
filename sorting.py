@@ -4,17 +4,15 @@ def partition(A, *, start=0, end=None, ppos=None):
     assert end is None or start < end <= len(A)
     assert ppos is None or start <= ppos < end
 
-    """Partition A.
-
-    Positional arguments:
-        A    : the list to partition.
-    Keyword arguments:
-        start: partition A from this position; ignore what's before;
-                defaults to 0;
-        end  : partition A up until this position NOT included; ignore
-                what's after; defaults to the length of A;
-        ppos : use the element at this position as the pivot; defaults
-                to the last element of A.
+    """
+    Partiziona il vettore A.
+    
+    Argomenti:
+    - A     : il vettore da partizionare
+    - start : posizione iniziale da considerare. Se non specificata è 0.
+    - end   : posizione finale da considerare. Se non specificata è la
+                lunghezza di A.
+    - ppos  : posizione del pivot da utilizzare.
     """
 
     if end is None:
@@ -38,21 +36,20 @@ def partition(A, *, start=0, end=None, ppos=None):
     return i - 1
 
 
-# Used in medianofmedians to sort the fixed-size lists
 def insertionsort(A, *, start=0, end=None, compkey=lambda x: x):
     assert A is not None
     assert 0 <= start < len(A)
     assert end is None or start < end <= len(A)
 
-    """Sort A.
-
-    Position arguments:
-        A    : the list to sort.
-    Keyword arguments:
-        start: start sorting from this position; ignore what's before;
-                defaults to 0;
-        end  : stop sorting at this position NOT included; ignore
-                what's after; defaults to the length of A.
+    """
+    Ordina il vettore A.
+    
+    Argomenti:
+    - A       : il vettore da ordinare
+    - start   : posizione iniziale da considerare. Se non specificata è 0.
+    - end     : posizione finale da considerare. Se non specificata è la
+                lunghezza di A.
+    - compkey : funzione che ritorna la chiave da utilizzare per i confronti.
     """
 
     if end is None:

@@ -115,15 +115,15 @@ Sono proposte tre varianti:
     \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
     \item in-place: riutilizza lo spazio allocato per il vettore originale e non effettua chiamate ricorsive.
 \end{enumerate}
-In tutti i casi, la complessità temporale e spaziale dell'algoritmo nel caso pessimo è \Tlin{}.
+In tutti i casi, la complessità temporal dell'algoritmo nel caso pessimo è \Tlin{}.
 Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in-place.
 
 Data la loro somiglianza, si è deciso di implementare \QuickSelect{} e \MoMSelect{} con un'unica procedura di selezione; ciò che cambia è la procedura per la scelta del pivot.
 La procedura di selezione è stata implementata in modo iterativo e non ricorsivo per evitare di effettuare troppe chiamate ricorsive nel caso peggiore di \QuickSelect{} e quindi incorrere in errore.
 
 \subsection{Algoritmo per la generazione dei vettori}
-La lunghezza $n$ dei vettori generati varia da $1000$ ($n_{\min}$) a $100000$ ($n_{\max}$), mentre i valori degli interi variano da $0$ a $100000$.
-In certe misurazioni la lunghezza dei vettori cresce secondo la serie geometrica
+La lunghezza $n$ dei vettori generati varia da $n_{\min}=10^2$ a $n_{\max}=10^5$, mentre i valori degli interi generati variano da $0$ a $10^5$.
+In tutte le misurazioni, eccetto quella con $n$ fissato, la lunghezza dei vettori cresce secondo la serie geometrica
 \[
     L(i) = n_{\min} \cdot \left(\frac{n_{\max}}{n_{\min}}\right)^{i/99}
 \]
@@ -135,12 +135,11 @@ Vi è anche un'altra procedura per la generazione di un vettore, utilizzata per 
 
 \section{Misurazione dei tempi di esecuzione}
 \label{sec:misurazione}
-La misurazione dei tempi necessari per calcolare il k-esimo numero in un array viene effettuata considerando la lunghezza \( n \) dell'array di input e l'errore massimo consentito. Per ogni lunghezza dell'array, gli algoritmi implementati ripetono il calcolo del k-esimo numero, un numero di volte tale da garantire un errore massimo relativo pari a \( e_{\max} = 0.001 \), assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{e_{\max}} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
+La misurazione dei tempi necessari per calcolare il $k$-esimo elemento in un vettore viene effettuata considerando la lunghezza \( n \) di $v$ vettore di input e l'errore relativo massimo, fissato a $e_{\max} = 10^{-3}$.
+Per ogni $n$, gli algoritmi implementati ripetono il calcolo un numero di volte tale da garantire un errore massimo relativo pari a  $e_{\max}$, assicurando così un tempo totale maggiore o uguale a \( T_{\min} \), calcolato come \[ T_{\min} = R \left( \frac{1}{e_{\max}} + 1 \right) \] dove \( R \) rappresenta la risoluzione del clock.
+Il tempo totale così ottenuto viene diviso per il numero di volte che l'algoritmo ha eseguito.
 
-Ciascuna iterazione del calcolo del k-esimo numero viene eseguita su un array, generato pseudo-casualmente di lunghezza \( n \), differente ad ogni iterazione.
-L'analisi dell'efficienza dei tre algoritmi viene effettuata attraverso la misurazione dei tempi medi.
-
-Prima o dopo il codice che effettua la misurazione sono state inserite istruzioni per disabilire e successivamente riabilirare il \emph{garbage collector} di Python, in modo da non incorrere in errori di misurazione in tal senso.
+Inoltre prima e dopo il codice che effettua la misurazione sono state inserite istruzioni per disabilitare e successivamente riabilirare il \emph{garbage collector} di Python, in modo da non incorrere in errori di misurazione in tal senso.
 
 
 \newpage
@@ -232,7 +231,7 @@ Anche dal grafico logaritmico si nota che, mentre \HeapSelect{} e \MoMSelect{} s
 
 C'è anche un secondo caso peggiore per \QuickSelect{}, che però l'implementazione qui proposta non permette di osservare.
 Si tratta del caso in cui il vettore è ordinato in modo crescente, $k=n$ e il pivot è selezionato sempre come il primo elemento del sottovettore considerato.
-La nostra implementazine non lo permette in quanto il pivot è selezionato sempre come l'ultimo elemento del vettore, e di conseguenza risulta essere addirittura il caso migliore.
+La nostra implementazine non lo permette in quanto il pivot è selezionato sempre come l'ultimo elemento del vettore.
 
 
 

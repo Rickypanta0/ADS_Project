@@ -22,7 +22,6 @@ RELATIVE_ERROR = 0.001
 
 
 def get_timer_resolution():
-    """Determina la risoluzione del timer."""
     start = time.perf_counter()
     while True:
         end = time.perf_counter()
@@ -36,17 +35,11 @@ def get_minimum_measurable_time(relative_error, timer_resolution):
 
 
 def generate_input(n, max_value):
-    """Genera un array di lunghezza 'n' con valori interi pseudo-casuali fino a
-    'max_value'."""
     return [random.randint(0, max_value) for _ in range(n)]
 
 
-def generate_input_worst_case_quick_select(n, max_value, reverse=False):
-    """
-    Genera un vettore di lunghezza n con valori interi pseudocasuali da 0 a max_value
-    in ordine crescente.
-    """
-    return sorted([random.randint(0, max_value) for _ in range(n)], reverse=reverse)
+def generate_input_worst_case_quick_select(n, max_value):
+    return sorted([random.randint(0, max_value) for _ in range(n)])
 
 
 def benchmark(
@@ -57,17 +50,34 @@ def benchmark(
     minimum_measurable_time,
     input_function,
 ):
+    """
+    Misura il tempo richiesto dall'algoritmo per eseguire, assicurando
+    che sia maggiore o uguale al tempo minimo misurabile.
+
+    Argomenti:
+    - algorithm               : l'algoritmo di cui misurare il tempo di esecuzione
+    - array_length            : la lunghezza del vettore da generare
+    - max_value               : valore massimo degli interi da generare
+    - k_value                 : funzione che restituisce k in base ad array_length
+    - minimum_measurable_time : tempo minimo misurabile
+    - input_function          : funzione che genera l'input
+
+    Ritorna il tempo misurato.
+    """
+
     assert algorithm is not None
     assert array_length > 0
+    assert max_value > 0
+    assert k_value is not None
     assert input_function is not None
 
     generated_input = input_function(array_length, max_value)
     i = 0
+    k = k_value(array_length) - 1
+    assert 0 <= k < array_length
     if gc.isenabled():
         gc.disable()
     start_time = time.perf_counter()
-    k = k_value(array_length) - 1
-    assert 0 <= k < array_length
     while ((end_time := time.perf_counter()) - start_time) < minimum_measurable_time:
         algorithm(generated_input.copy(), k)
         i += 1
@@ -87,6 +97,23 @@ def compute_points(
     max_value=MAX_VALUE,
     input_function=generate_input,
 ):
+    """
+    Calcola i tempi di esecuzione degli algoritmi in input.
+
+    Argomenti:
+    - name              : nome della computazione
+    - algorithms        : lista degli algoritmi da misurare
+    - k_value           : funzione che restituisce k in base alla lunghezza del vettore
+    - iters             : numero di iterazioni (= di punti) da calcolare
+    - min_array_length  : lunghezza minima dei vettori
+    - max_array_length  : lunghezza massima dei vettori
+    - max_value         : valore massimo degli interi da generare
+    - input_function    : funzione che genera l'input
+
+    Ritorna una lista lunga iters in cui ogni elemento è una lista tale che il primo
+        elemento è la lunghezza del vettore generato e gli altri elementi sono i tempi di
+        esecuzione degli algoritmi, nell'ordine in si trovano in algorithms.
+    """
     assert k_value is not None
     assert iters > 0
     assert 0 < min_array_length < max_array_length
@@ -121,6 +148,10 @@ def compute_points(
 
 
 def plot_points(points, algorithm_names, title, xlabel, ylabel, log_scale=False):
+    """
+    Fa un grafico dei punti.
+    """
+
     assert len(points[0]) - 1 == len(algorithm_names)
 
     coordinates = [*zip(*points)]

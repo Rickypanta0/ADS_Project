@@ -41,19 +41,6 @@ class MinHeap(Heap):
         for i in range(self.heapsize // 2, -1, -1):
             self.heapify(i)
 
-    def verify(self, i):
-        cond = True
-        left = self.left(i)
-        right = self.right(i)
-        if left <= self.heapsize:
-            cond = cond and (self.compkey(self.A[i]) <= self.compkey(self.A[left]))
-            cond = cond and self.verify(left)
-        if right <= self.heapsize:
-            cond = cond and (self.compkey(self.A[i]) <= self.compkey(self.A[right]))
-            cond = cond and self.verify(right)
-        return cond
-
-
 class MaxHeap(Heap):
 
     def heapify(self, i):
@@ -93,15 +80,3 @@ class MaxHeap(Heap):
     def build(self):
         for i in range(self.heapsize // 2, -1, -1):
             self.heapify(i)
-
-    def verify(self, i):
-        cond = True
-        left = self.left(i)
-        right = self.right(i)
-        if left <= self.heapsize:
-            cond = cond and (self.compkey(self.A[i]) >= self.compkey(self.A[left]))
-            cond = cond and self.verify(left)
-        if right <= self.heapsize:
-            cond = cond and (self.compkey(self.A[i]) >= self.compkey(self.A[right]))
-            cond = cond and self.verify(right)
-        return cond

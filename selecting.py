@@ -36,19 +36,18 @@ def median_of_medians_non_in_place(A, *, start=0, end=None, blocksize=5):
     assert (end is None) or (start < end <= len(A))
     assert blocksize > 0
 
-    """Calculate an approximate median of subarray A[start:end).
+    """
+    Calcola una mediana approssimata del sottovettore A[start:end]
+    
+    Argomenti:
+    - A : il vettore di cui calcolare la mediana approssimata
+    - start : posizione iniziale da considerare
+    - end   : posizione finale da considerare. Se non specificata prende il 
+                valore della lunghezza del vettore.
+    - blocksize : dimensione dei blocchi di elementi ordinati. Se non
+                specificata assume valore 5.
 
-        Positional arguments:
-            A      : the list to calculate the median of.
-        Keyword arguments:
-            start    : the starting point of the subarray; defaults to 0;
-            end      : the ending point (NOT included) of the subarray;
-                        defaults to the length of A;
-            blocksize: the size of the blocks of elements sorted; default
-                        to 5.
-
-        Return:
-            the median of medians.
+    Ritorna la mediana delle mediane.
     """
 
     return median_of_medians_non_in_place_real(
@@ -97,19 +96,18 @@ def median_of_medians_quasi_in_place(A, *, start=0, end=None, blocksize=5):
     assert (end is None) or (start < end <= len(A))
     assert blocksize > 0
 
-    """Calculate an approximate median of subarray A[start:end).
+    """
+    Calcola una mediana approssimata del sottovettore A[start:end]
+    
+    Argomenti:
+    - A : il vettore di cui calcolare la mediana approssimata
+    - start : posizione iniziale da considerare
+    - end   : posizione finale da considerare. Se non specificata prende il 
+                valore della lunghezza del vettore.
+    - blocksize : dimensione dei blocchi di elementi ordinati. Se non
+                specificata assume valore 5.
 
-        Positional arguments:
-            A      : the list to calculate the median of.
-        Keyword arguments:
-            start    : the starting point of the subarray; defaults to 0;
-            end      : the ending point (NOT included) of the subarray;
-                        defaults to the length of A;
-            blocksize: the size of the blocks of elements sorted; defaults
-                        to 5.
-
-        Return:
-            the position of the median of medians.
+    Ritorna la mediana delle mediane.
     """
 
     # Per ogni blocco di dimensione blocksize, trova la mediana ordinandolo e
@@ -152,19 +150,18 @@ def median_of_medians_in_place(A, *, start=0, end=None, blocksize=5):
     assert (end is None) or (start < end <= len(A))
     assert blocksize > 0
 
-    """Calculate an approximate median of subarray A[start:end).
+    """
+    Calcola una mediana approssimata del sottovettore A[start:end]
+    
+    Argomenti:
+    - A : il vettore di cui calcolare la mediana approssimata
+    - start : posizione iniziale da considerare
+    - end   : posizione finale da considerare. Se non specificata prende il 
+                valore della lunghezza del vettore.
+    - blocksize : dimensione dei blocchi di elementi ordinati. Se non
+                specificata assume valore 5.
 
-        Positional arguments:
-            A      : the list to calculate the median of.
-        Keyword arguments:
-            start    : the starting point of the subarray; defaults to 0;
-            end      : the ending point (NOT included) of the subarray;
-                        defaults to the length of A;
-            blocksize: the size of the blocks of elements sorted; defaults
-                        to 5.
-
-        Return:
-            the position of the median of medians.
+    Ritorna la mediana delle mediane.
     """
 
     # Versione iterativa di median_of_medians_quasi_in_place,
@@ -197,6 +194,20 @@ def select(A, k, *, start=0, end=None, pfunc):
     assert 0 <= start < len(A)
     assert end is None or start < end <= len(A)
     assert pfunc is not None
+
+    """
+    Seleziona il k-esimo elemento più piccolo da A[start:end].
+
+    Argomenti:
+    - A     : vettore di cui calcolare il k-esimo elemento
+    - k     : indice dell'elemento da calcolare
+    - start : posizione iniziale da considerare
+    - end   : posizione finale da considerare
+    - pfunc : funzione di tre argomenti
+                (vettore, posizione iniziale, posizione finale)
+              che ritorna la posizione del pivot da usare per il
+              partizionamento
+    """
 
     if end is None:
         end = len(A)
