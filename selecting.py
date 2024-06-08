@@ -169,7 +169,8 @@ def median_of_medians_in_place(A, *, start=0, end=None, blocksize=5):
     if end is None:
         end = len(A)
 
-    while (subarray_length := end - start) > 1:
+    subarray_length = end - start
+    while subarray_length > 1:
         # Il numero di mediane da calcolare è dato dal rapporto tra il numero
         # di elementi del sottovettore considerato e la dimensione dei blocchi.
         # Siccome l'ultimo blocco può avere dimensione strettamente minore di
@@ -182,6 +183,7 @@ def median_of_medians_in_place(A, *, start=0, end=None, blocksize=5):
             median_position = (block_start + block_end) // 2
             A[start + i], A[median_position] = A[median_position], A[start + i]
         end = start + n_medians  # vedi commento nella versione quasi in-place
+        subarray_length = end - start
 
     assert subarray_length == 1  # guardia nel caso in cui il ciclo dovesse
     # finire con subarray_length < 0
