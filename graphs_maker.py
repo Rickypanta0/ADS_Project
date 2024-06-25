@@ -322,8 +322,8 @@ def plot_var_k():
         points_n_fixed_var_k,
         ["MoM select", "Heap select", "Quick select"],
         "Caso n fissato k variato",
-        "Indice k (log)",
-        "Tempo (s) (log)",
+        "Indice k (lineare)",
+        "Tempo (s) (lineare)",
     )
     plot_points(
         points_n_fixed_var_k,
@@ -357,5 +357,5 @@ if __name__ == "__main__":
     #plot_worst_case_quick_select()
 
     ##Caso n fissato k variato
-    #plot_var_k()
-    pass
+    plot_var_k()
+    #pass
