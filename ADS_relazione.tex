@@ -81,7 +81,7 @@ Dato un vettore di interi $v$ di dimensione $n$ e un intero $k$ con $1 < k \le n
 I tre algoritmi discussi sono \QuickSelect{}, \HeapSelect{} e \MoMSelect{} (che sta per median-of-medians select); vengono presentati nella sezione \ref{sec:presentazione-algoritmi} insieme all'algoritmo utilizzato per la generazione dell'input.
 Nella sezione \ref{sec:misurazione} si discute brevemente la misurazione dei tempi di esecuzione, necessaria per l'analisi della complessità.
 Nella sezione \ref{sec:grafici} vengono presentati e discussi i risultati delle misurazioni sotto forma di grafici.
-Infine nella sezione \ref{sec:confronto-mom} viene proposto un confronto tra alcune varianti di \MoMSelect{}.
+Infine nella sezione \ref{sec:confronto-mom} viene proposto un confronto tra due varianti di \MoMSelect{}.
 
 
 
@@ -94,6 +94,7 @@ Questo algoritmo partiziona iterativamente $v$ rispetto a un elemento scelto com
 Quest'ultimo viene scelto sempre come l'ultimo elemento del sottovettore considerato.
 Questo approccio fa in modo che la complessità nel caso peggiore sia \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio sia \Tlin.
 D'altra parte l'overhead dovuto alla scelta del pivot è molto basso, il che, come si vedrà, porta ad un vantaggio rispetto a \MoMSelect{} nel caso di vettori generati pseudo-casualmente.
+L'implementazione è stata fatta in modo iterativo e non ricorsivo per evitare di effettuare troppe chiamate ricorsive nel caso peggiore e quindi incorrere in errore.
 
 \paragraph{\HeapSelect}
 L'algoritmo sfrutta due heap $H_1$ e $H_2$.
@@ -106,20 +107,16 @@ Essendo $1 \le k \le n$, la complessità effettiva varia da $O(n)$ a $O(n\log n)
 
 \paragraph{\MoMSelect}
 Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: iterare sulla porzione di vettore che contiene l'elemento cercato.
-La differenza tra i due algoritmi sta nella scelta del pivot.
-Infatti \MoMSelect{} utilizza una procedura ausiliaria che calcola la posizione della mediana delle mediane all'interno del sottovettore considerato.
-Nello specifico tale procedura divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva (o un'altra iterazione) sulle mediane appena calcolate finché non rimane un solo elemento: la mediana delle mediane.
-Sono proposte tre varianti:
+La differenza tra i due algoritmo sta nella scelta del pivot.
+Infatti \MomSelect{} effettua una chiamata ricorsiva ulteriore per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate per trovarne la mediana, ovvero impostando $k=m/2$, dove $m$ è il numero delle mediane calcolate.
+Sono proposte due varianti:
 \begin{enumerate}
     \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
-    \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input;
-    \item in-place: riutilizza lo spazio allocato per il vettore originale e non effettua chiamate ricorsive.
+    \item quasi in-place: riutilizza lo spazio allocato per il vettore originariamente fornito in input.
 \end{enumerate}
-In tutti i casi, la complessità temporal dell'algoritmo nel caso pessimo è \Tlin{}.
+In entrambi i casi, la complessità temporale dell'algoritmo nel caso pessimo è \Tlin{}.
 Nei grafici della sezione \ref{sec:grafici} verrà utilizzata la versione quasi in-place.
 
-Data la loro somiglianza, si è deciso di implementare \QuickSelect{} e \MoMSelect{} con un'unica procedura di selezione; ciò che cambia è la procedura per la scelta del pivot.
-La procedura di selezione è stata implementata in modo iterativo e non ricorsivo per evitare di effettuare troppe chiamate ricorsive nel caso peggiore di \QuickSelect{} e quindi incorrere in errore.
 
 \subsection{Algoritmo per la generazione dei vettori}
 La lunghezza $n$ dei vettori generati varia da $n_{\min}=10^2$ a $n_{\max}=10^5$, mentre i valori degli interi generati variano da $0$ a $10^5$.
@@ -237,7 +234,7 @@ La nostra implementazine non lo permette in quanto il pivot è selezionato sempr
 
 \section{Confronto tra MoM}
 \label{sec:confronto-mom}
-Proponiamo infine un confronto tra tre algoritmi di selezione che utilizzano varianti di procedure per il calcolo della mediana delle mediane, che differiscono per lo spazio utilizzato.
+Proponiamo infine un confronto tra due varianti di \MoMSelect{}, che differiscono per lo spazio utilizzato.
 
 \begin{figure}[h]
     \centering
@@ -245,9 +242,9 @@ Proponiamo infine un confronto tra tre algoritmi di selezione che utilizzano var
     \includegraphics[width=.83\textwidth]{graphs/MoMs_2xlog.png}
 \end{figure}
 
-Dal grafico logaritmico notiamo che i tre andamenti sono paralleli, come ci si aspetta, essendo la complessità della procedura di selezione sempre $O(n)$, indipendentemente dall'algoritmo di calcolo della mediana delle mediane.
+Dal grafico logaritmico notiamo che i due andamenti sono paralleli, come ci si aspetta, essendo la complessità temporale  $O(n)$ indipendentemente da come vengono memorizzate le mediane.
 D'altra parte dal grafico lineare vediamo un progressivo discostamento della versione non-in-place, cioè quella che utilizza un nuovo vettore per tenere traccia delle mediane.
-Evidentemente il costo della gestione di un vettore ausiliario è significativo rispetto al a quello dovuto alle chiamate ricorsive e alle iterazioni; infatti la differenza tra la versione quasi in-place e quella in-place è praticamente trascurabile.
+Evidentemente il costo della gestione di un vettore ausiliario è significativo rispetto al a quello dovuto alle chiamate ricorsive.
 
 \section{Conclusione}
 Dall'analisi fatta nella sezione precedente possiamo trarre le seguenti conclusioni:

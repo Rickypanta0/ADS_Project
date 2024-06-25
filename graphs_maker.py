@@ -5,13 +5,9 @@ import matplotlib.pyplot as plt
 from functools import partial
 import numpy as np
 
-from selecting import (
-    quick_select,
-    median_of_medians_select,
-    heap_select,
-    median_of_medians_np,
-    median_of_medians_p,
-)
+from momselect import mom_select_non_in_place, mom_select_quasi_in_place
+from heapselect import heap_select
+from quickselect import quick_select
 
 MIN_ARRAY_LENGTH = 10**2
 MAX_ARRAY_LENGTH = 10**5
@@ -174,7 +170,7 @@ def compute_points_n_fixed(
     *,
     n=10000,
     iters=100,
-    algorithms=(median_of_medians_select, heap_select, quick_select),
+    algorithms=(mom_select_quasi_in_place, heap_select, quick_select),
     input_function=generate_input,
 ):
     timer_resolution = get_timer_resolution()
@@ -206,7 +202,7 @@ def compute_points_n_fixed(
 def plot_middle():
     points_middle = compute_points(
         "Caso k=n/2",
-        (median_of_medians_select, heap_select, quick_select),
+        (mom_select_quasi_in_place, heap_select, quick_select),
         k_value=lambda n: n // 2,
     )
     plot_points(
@@ -229,7 +225,7 @@ def plot_middle():
 def plot_extreme():
     points_extreme = compute_points(
         "Caso k=n",
-        [median_of_medians_select, heap_select, quick_select],
+        [mom_select_quasi_in_place, heap_select, quick_select],
         k_value=lambda n: n,
     )
     plot_points(
@@ -252,7 +248,7 @@ def plot_extreme():
 def plot_random():
     points_random = compute_points(
         "Caso k random",
-        [median_of_medians_select, heap_select, quick_select],
+        [mom_select_quasi_in_place, heap_select, quick_select],
         k_value=lambda n: random.randint(1, n),
     )
     plot_points(
@@ -275,19 +271,19 @@ def plot_random():
 def plot_mom():
     points_mom = compute_points(
         "Confronto tra MoM con k=n/2",
-        (median_of_medians_select, median_of_medians_np, median_of_medians_p),
+        (mom_select_quasi_in_place, mom_select_non_in_place),
         k_value=lambda n: n // 2,
     )
     plot_points(
         points_mom,
-        ("MoM quasi in-place", "MoM non in-place", "MoM in-place"),
+        ("MoM quasi in-place", "MoM non in-place"),
         "Confronto tra MoM con k=n/2",
         "Lunghezza vettore (lineare)",
         "Tempo (s) (lineare)",
     )
     plot_points(
         points_mom,
-        ("MoM quasi in-place", "MoM non in-place", "MoM in-place"),
+        ("MoM quasi in-place", "MoM non in-place"),
         "Confronto tra MoM con k=n/2",
         "Lunghezza vettore (log)",
         "Tempo (s) (log)",
@@ -298,7 +294,7 @@ def plot_mom():
 def plot_worst_case_quick_select():
     points_worst_case_quick_select = compute_points(
         "Caso peggiore quick select",
-        [median_of_medians_select, heap_select, quick_select],
+        [mom_select_quasi_in_place, heap_select, quick_select],
         k_value=lambda n: 1,
         input_function=generate_input_worst_case_quick_select,
         max_array_length=10**4,
@@ -342,24 +338,24 @@ def plot_var_k():
 if __name__ == "__main__":
     # Commentare i vari casi secondo le necessità
 
-    # Caso k=n/2
+    ##Caso k=n/2
     #plot_middle()
 
-    # Caso k=n
+    ##Caso k=n
     #plot_extreme()
 
-    # Caso k random
+    ##Caso k random
     #plot_random()
 
-    # Confronto MoM
+    #Confronto MoM
     #plot_mom()
 
-    # Caso peggiore per quick select
-    # In questo caso la lunghezza massima del vettore è 10000
-    # perché altrimenti le misurazione richiedono troppo tempo
-    # N.B. molto lento
+    ##Caso peggiore per quick select
+    ##In questo caso la lunghezza massima del vettore è 10000
+    ##perché altrimenti le misurazione richiedono troppo tempo
+    ##N.B. molto lento
     #plot_worst_case_quick_select()
 
-    # Caso n fissato k variato
+    ##Caso n fissato k variato
     #plot_var_k()
     pass

@@ -1,8 +1,7 @@
-def partition(A, *, start=0, end=None, ppos=None):
+def partition(A, *, start=0, end=None, pivot=None):
     assert A is not None
     assert 0 <= start < len(A)
     assert end is None or start < end <= len(A)
-    assert ppos is None or start <= ppos < end
 
     """
     Partiziona il vettore A.
@@ -12,14 +11,17 @@ def partition(A, *, start=0, end=None, ppos=None):
     - start : posizione iniziale da considerare. Se non specificata è 0.
     - end   : posizione finale da considerare. Se non specificata è la
                 lunghezza di A.
-    - ppos  : posizione del pivot da utilizzare.
+    - pivot : pivot da utilizzare.
     """
 
     if end is None:
         end = len(A)
 
-    if ppos is None:
+    if pivot is None:
         ppos = end - 1
+    else:
+        # il costo rimane lineare
+        ppos = A.index(pivot, start, end)
 
     pivot = A[ppos]
     A[ppos], A[end - 1] = A[end - 1], A[ppos]
