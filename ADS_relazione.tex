@@ -92,9 +92,11 @@ Infine nella sezione \ref{sec:confronto-mom} viene proposto un confronto tra due
 \paragraph{\QuickSelect}
 Questo algoritmo partiziona iterativamente $v$ rispetto a un elemento scelto come pivot e confronta la posizione finale del pivot con $k$: se sono uguali allora l'algoritmo termina, ritornando $v[k]$; altrimenti la prossima iterazione si restringe alla partizione sinistra o destra di $v$, a seconda che $k$ sia rispettivamente minore o maggiore della posizione finale del pivot.
 Quest'ultimo viene scelto sempre come l'ultimo elemento del sottovettore considerato.
-Questo approccio fa in modo che la complessità nel caso peggiore sia \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio sia \Tlin.
-D'altra parte l'overhead dovuto alla scelta del pivot è molto basso, il che, come si vedrà, porta ad un vantaggio rispetto a \MoMSelect{} nel caso di vettori generati pseudo-casualmente.
-L'implementazione è stata fatta in modo iterativo e non ricorsivo per evitare di effettuare troppe chiamate ricorsive nel caso peggiore e quindi incorrere in errore.
+Così facendo la complessità nel caso peggiore è \Tquad{} (quando il vettore è già ordinato, in un senso o nell'altro), mentre nel caso medio è \Tlin.
+
+Al netto del caso peggiore, come si vedrà il basso overhead dovuto alla scelta del pivot porta a un vantaggio rispetto agli altri algoritmi di selezione, e soprattutto rispetto a \MoMSelect{}, che ha la stessa complessità di \QuickSelect{} nel caso medio.
+
+L'implementazione è stata fatta in modo iterativo e non ricorsivo per evitare di effettuare troppe chiamate ricorsive nel caso peggiore e quindi incorrere in errore in tal senso.
 
 \paragraph{\HeapSelect}
 L'algoritmo sfrutta due heap $H_1$ e $H_2$.
@@ -106,9 +108,10 @@ Questo algoritmo ha una complessità temporale pari a $O(n+k\log k)$.
 Essendo $1 \le k \le n$, la complessità effettiva varia da $O(n)$ a $O(n\log n)$; nella sezione \ref{sec:grafici} si analizzano entrambi i casi.
 
 \paragraph{\MoMSelect}
-Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: iterare sulla porzione di vettore che contiene l'elemento cercato.
+Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: restringersi alla porzione di vettore che contiene l'elemento cercato.
 La differenza tra i due algoritmo sta nella scelta del pivot.
-Infatti \MomSelect{} effettua una chiamata ricorsiva ulteriore per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate per trovarne la mediana, ovvero impostando $k=m/2$, dove $m$ è il numero delle mediane calcolate.
+Infatti \MoMSelect{} effettua una chiamata ricorsiva per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate per trovarne la mediana; in tale chiamata ricorsiva $k=m/2$, dove $m=\lceil n/5\rceil$ è il numero delle mediane calcolate.
+Una volta trovata la mediana delle mediante la utilizza come pivot nel partizionamento del vettore principale.
 Sono proposte due varianti:
 \begin{enumerate}
     \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
@@ -219,7 +222,7 @@ Ma vediamo ora un caso in cui ciò può accadere, cioè quando il vettore è ord
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.83\textwidth]{graphs/QS_wrost_case.png}
+    \includegraphics[width=.83\textwidth]{graphs/QS_n.png}
     \includegraphics[width=.83\textwidth]{graphs/QS_2xlog.png}
 \end{figure}
 
