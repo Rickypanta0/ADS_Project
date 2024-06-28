@@ -1,8 +1,12 @@
 class Heap:
 
-    def __init__(self, A=None, *, compkey=lambda x: x):
-        self.A = A if A is not None else []
-        self.heapsize = len(self.A) - 1
+    def __init__(self, A=None, *, max_size=None, compkey=lambda x: x):
+        if A is not None:
+            self.A = A
+            self.heapsize = len(A) - 1
+        else:
+            self.A = [None] * max_size
+            self.heapsize = -1
         self.compkey = compkey
 
     def right(self, i):

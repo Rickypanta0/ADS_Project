@@ -1,16 +1,17 @@
 from Min_Max_heap import MinHeap, MaxHeap
 
+
 def heap_select(A, k):
     assert A is not None
     assert 0 <= k < len(A)
 
     if k <= (len(A) // 2):
         H1 = MinHeap(A)
-        H2 = MinHeap(compkey=lambda x: x[0])
+        H2 = MinHeap(max_size=len(A), compkey=lambda x: x[0])
     else:
         H1 = MaxHeap(A)
         k = len(A) - k - 1
-        H2 = MaxHeap(compkey=lambda x: x[0])
+        H2 = MaxHeap(max_size=len(A), compkey=lambda x: x[0])
     H1.build()
     H2.insert((H1.A[0], 0))
 
@@ -25,10 +26,8 @@ def heap_select(A, k):
     return H2.extract()[0]
 
 
-
-if __name__ == '__main__':
-    A = [int(x) for x in input().strip().split(' ')]
+if __name__ == "__main__":
+    A = [int(x) for x in input().strip().split(" ")]
     k = int(input()) - 1
 
     print(heap_select(A, k))
-
