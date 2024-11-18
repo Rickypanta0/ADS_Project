@@ -6,8 +6,6 @@
 *.fdb_latexmk
 
 # file pdf della relazione
-ADS_relazione.pdf
-
 # file ausiliari generati da python
 *.pyc
 
@@ -20,3 +18,9 @@ pyproject.toml
 __pycache__/
 __pycache__/selecting.cpython-310.pyc
 __pycache__/sorting.cpython-310.pyc
+*.log
+*.aux
+*.out
+*.synctex.gz
+*.toc
+.DS_store

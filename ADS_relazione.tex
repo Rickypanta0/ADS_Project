@@ -108,7 +108,7 @@ Essendo $1 \le k \le n$, la complessità effettiva varia da $O(n)$ a $O(n\log n)
 \paragraph{\MoMSelect}
 Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: iterare sulla porzione di vettore che contiene l'elemento cercato.
 La differenza tra i due algoritmo sta nella scelta del pivot.
-Infatti \MomSelect{} effettua una chiamata ricorsiva ulteriore per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate per trovarne la mediana, ovvero impostando $k=m/2$, dove $m$ è il numero delle mediane calcolate.
+Infatti $MomSelect$ effettua una chiamata ricorsiva ulteriore per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate per trovarne la mediana, ovvero impostando $k=m/2$, dove $m$ è il numero delle mediane calcolate.
 Sono proposte due varianti:
 \begin{enumerate}
     \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
@@ -219,7 +219,7 @@ Ma vediamo ora un caso in cui ciò può accadere, cioè quando il vettore è ord
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.83\textwidth]{graphs/QS_wrost_case.png}
+    \includegraphics[width=.83\textwidth]{graphs/QS_n.png}
     \includegraphics[width=.83\textwidth]{graphs/QS_2xlog.png}
 \end{figure}
 
