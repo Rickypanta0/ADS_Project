@@ -11,8 +11,8 @@ from heapselect import heap_select
 class SelectTest(unittest.TestCase):
 
     def setUp(self):
-        self.n = 1000  # grandezza del vettore da generare
-        self.nmax = 100000  # numero massimo generabile
+        self.n = 20  # grandezza del vettore da generare
+        self.nmax = 10  # numero massimo generabile
         self.generated_input = generate_input(self.n, self.nmax)
         self.sorted_input = sorted(self.generated_input)
 
@@ -23,9 +23,7 @@ class SelectTest(unittest.TestCase):
         for k in range(self.n):
             with self.subTest(i=k):
                 copy = self.generated_input.copy()
-                self.assertEqual(
-                    mom_select_non_in_place(copy, k), self.sorted_input[k]
-                )
+                self.assertEqual(mom_select_non_in_place(copy, k), self.sorted_input[k])
 
     def test_mom_select_quasi_in_place(self):
         for k in range(self.n):

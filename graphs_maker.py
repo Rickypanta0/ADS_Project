@@ -339,23 +339,23 @@ if __name__ == "__main__":
     # Commentare i vari casi secondo le necessità
 
     ##Caso k=n/2
-    #plot_middle()
+    # plot_middle()
 
     ##Caso k=n
-    #plot_extreme()
+    # plot_extreme()
 
     ##Caso k random
-    #plot_random()
+    # plot_random()
 
-    #Confronto MoM
-    #plot_mom()
+    # Confronto MoM
+    # plot_mom()
 
     ##Caso peggiore per quick select
     ##In questo caso la lunghezza massima del vettore è 10000
     ##perché altrimenti le misurazione richiedono troppo tempo
     ##N.B. molto lento
-    #plot_worst_case_quick_select()
+    # plot_worst_case_quick_select()
 
     ##Caso n fissato k variato
-    plot_var_k()
-    #pass
+    # plot_var_k()
+    pass

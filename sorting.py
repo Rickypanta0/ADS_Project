@@ -9,8 +9,8 @@ def partition(A, *, start=0, end=None, pivot=None):
     Argomenti:
     - A     : il vettore da partizionare
     - start : posizione iniziale da considerare. Se non specificata è 0.
-    - end   : posizione finale da considerare. Se non specificata è la
-                lunghezza di A.
+    - end   : posizione finale esclusa da considerare. Se non specificata 
+                è la lunghezza di A.
     - pivot : pivot da utilizzare.
     """
 
@@ -38,7 +38,7 @@ def partition(A, *, start=0, end=None, pivot=None):
     return i - 1
 
 
-def insertionsort(A, *, start=0, end=None, compkey=lambda x: x):
+def insertion_sort(A, *, start=0, end=None, compkey=lambda x: x):
     assert A is not None
     assert 0 <= start < len(A)
     assert end is None or start < end <= len(A)

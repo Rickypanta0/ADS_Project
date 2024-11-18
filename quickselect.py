@@ -1,5 +1,6 @@
 from sorting import partition
 
+
 def quick_select(A, k, *, start=0, end=None):
     assert A is not None
     assert 0 <= k < len(A)
@@ -31,8 +32,8 @@ def quick_select(A, k, *, start=0, end=None):
     return A[k]
 
 
-if __name__ == '__main__':
-    A = [int(x) for x in input().strip().split(' ')]
+if __name__ == "__main__":
+    A = [int(x) for x in input().strip().split(" ")]
     k = int(input()) - 1
 
     print(quick_select(A, k))

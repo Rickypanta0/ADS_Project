@@ -27,19 +27,18 @@ class MinHeap(Heap):
         return key
 
     def insert(self, k):
-        if len(self.A) > self.heapsize:
-            self.heapsize += 1
-            self.A.append(k)
-            i = self.heapsize
-            while i > 0 and self.compkey(self.A[i]) < self.compkey(
-                self.A[self.parent(i)]
-            ):
-                self.swap(i, self.parent(i))
-                i = self.parent(i)
+        assert len(self.A) > self.heapsize + 1
+        self.heapsize += 1
+        self.A[self.heapsize] = k
+        i = self.heapsize
+        while i > 0 and self.compkey(self.A[i]) < self.compkey(self.A[self.parent(i)]):
+            self.swap(i, self.parent(i))
+            i = self.parent(i)
 
     def build(self):
         for i in range(self.heapsize // 2, -1, -1):
             self.heapify(i)
+
 
 class MaxHeap(Heap):
 
@@ -67,15 +66,13 @@ class MaxHeap(Heap):
         return key
 
     def insert(self, k):
-        if len(self.A) > self.heapsize:
-            self.heapsize += 1
-            self.A.append(k)
-            i = self.heapsize
-            while i > 0 and self.compkey(self.A[i]) > self.compkey(
-                self.A[self.parent(i)]
-            ):
-                self.swap(i, self.parent(i))
-                i = self.parent(i)
+        assert len(self.A) > self.heapsize + 1
+        self.heapsize += 1
+        self.A[self.heapsize] = k
+        i = self.heapsize
+        while i > 0 and self.compkey(self.A[i]) > self.compkey(self.A[self.parent(i)]):
+            self.swap(i, self.parent(i))
+            i = self.parent(i)
 
     def build(self):
         for i in range(self.heapsize // 2, -1, -1):
