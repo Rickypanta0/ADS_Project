@@ -108,16 +108,10 @@ Questo algoritmo ha una complessità temporale pari a $O(n+k\log k)$.
 Essendo $1 \le k \le n$, la complessità effettiva varia da $O(n)$ a $O(n\log n)$; nella sezione \ref{sec:grafici} si analizzano entrambi i casi.
 
 \paragraph{\MoMSelect}
-<<<<<<< HEAD
-Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: iterare sulla porzione di vettore che contiene l'elemento cercato.
-La differenza tra i due algoritmo sta nella scelta del pivot.
-Infatti $MomSelect$ effettua una chiamata ricorsiva ulteriore per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle mediane appena calcolate per trovarne la mediana, ovvero impostando $k=m/2$, dove $m$ è il numero delle mediane calcolate.
-=======
 Il funzionamento ad alto livello di \MoMSelect{} è come quello di \QuickSelect: restringersi alla porzione di vettore che contiene l'elemento cercato.
 La differenza tra i due algoritmi sta nella scelta del pivot.
 Infatti \MoMSelect{} effettua una chiamata ricorsiva per trovare la mediana delle mediane, ovvero divide il vettore in blocchi da $5$ elementi (eccetto al più l'ultimo blocco), ordina poi ciascun blocco e ne calcola la mediana, quindi effettua una chiamata ricorsiva sulle sul nuovo vettore appena calcolato per trovarne la mediana; in tale chiamata ricorsiva $k=m/2$, dove $m=\lceil n/5\rceil$ è il numero delle mediane calcolate.
 Una volta trovata la mediana delle mediante la utilizza come pivot nel partizionamento del vettore principale.
->>>>>>> c06742b94e506bd4ed1f0863dd0aedfdc00b8d45
 Sono proposte due varianti:
 \begin{enumerate}
     \item non in-place: alloca un nuovo vettore ad ogni chiamata ricorsiva per memorizzare le mediane dei blocchi;
